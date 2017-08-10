@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="jp">
+<head>
+
+        <title>RC4加密算法及实现</title>
+        <meta charset="utf-8" />
+
+
+        <!-- Mobile viewport optimized: j.mp/bplateviewport -->
+        <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1">
+
+        <link rel="stylesheet" type="text/css" href="/theme/gumby.css" />
+        <link rel="stylesheet" type="text/css" href="/theme/style.css" />
+        <link rel="stylesheet" type="text/css" href="/theme/pygment.css" />
+
+        <script src="/theme/js/libs/modernizr-2.6.2.min.js"></script>
+
+
+
+
+</head>
+
+<body id="index" class="home">
+
+
+    <div class="container">
+
+        <div class="row">
+
+          <header id="banner" class="body">
+                  <h1><a href="/">lixingke3650 <strong></strong></a></h1>
+          </header><!-- /#banner -->
+
+            <div id="navigation" class="navbar row">
+              <a href="#" gumby-trigger="#navigation &gt; ul" class="toggle"><i class="icon-menu"></i></a>
+             
+              <ul class="columns">
+                <li><a href="/">Home</a></li>
+
+                  <li><a href="/category/ri-ji.html">日记</a></li>
+                  <li><a href="/category/xiang-mu.html">项目</a></li>
+                  <li class="active"><a href="/category/xue-xi.html">学习</a></li>
+                  <li><a href="/category/zheng-li.html">整理</a></li>
+
+              </ul>
+            </div>
+
+<section id="content" class="body">
+
+   <div class="row">
+        <div class="eleven columns">
+
+
+            <header>
+              <h2 class="entry-title">
+                <a href="/rc4jia-mi-suan-fa-ji-shi-xian.html" rel="bookmark"
+                   title="Permalink to RC4加密算法及实现">RC4加密算法及实现</a></h2>
+           
+            </header>
+            <footer class="post-info">
+              <abbr class="published" title="2015-02-28T21:00:00+09:00">
+                Sat 28 February 2015
+              </abbr>
+              <address class="vcard author">By 
+                <a class="url fn" href="/author/hanbin.html"> Hanbin</a>
+              </address>
+            </footer><!-- /.post-info -->
+            <div class="entry-content">
+              <hr class="docutils" />
+<p>之前写的一个网络间数据安全通信工具([OrTunnel][1])用到了该算法，
+整理并记载出来，以备翻阅。</p>
+<hr class="docutils" />
+<div class="section" id="rc4">
+<h2>RC4背景</h2>
+<p>RC4是一个数据加密算法，由Ron Rivest在1987年设计。
+设计之初，该算法并未被公开。后来(1994.9)不知是有意
+还是无意的被发布到了互联网上，并由此传播开来。
+也因此ARC4算法从未被正式公开过，其名称也没有一个官方说法，
+ARC4,RC4,ARCFOUR都是常用的名字。</p>
+</div>
+<div class="section" id="id1">
+<h2>RC4特点</h2>
+<ul class="simple">
+<li>RC4的密钥是可变长度的。</li>
+<li>RC4属于对称式加密，加解密使用同一密钥。</li>
+<li>RC4是一个流加密算法，可实时实现加解密，不需要获取全部数据包。</li>
+</ul>
+<p>从应用角度来说，RC4有如下需要注意的地方。</p>
+<p>优点：</p>
+<blockquote>
+<ul class="simple">
+<li>加解密速度极快</li>
+<li>软硬件实现相当容易</li>
+<li>加密性较好</li>
+</ul>
+</blockquote>
+<p>不足：</p>
+<blockquote>
+<ul class="simple">
+<li>对称式加密，加解密使用同一密钥，使得密钥管理变得麻烦</li>
+<li>加密用内部密钥是一个伪随机序列，存在被破解的危险</li>
+</ul>
+</blockquote>
+<p>RC4被广泛使用于互联网的各个地方，如WEP协议,BitTorrent协议,Skype等。
+但由于其自身安全性问题被SSL/TLS所弃用(2015年2月被禁止)。
+当然，由于其快速简单的特点，在某些领域还是可以发挥重要作用的。</p>
+</div>
+<div class="section" id="id2">
+<h2>RC4原理</h2>
+<p>二进制数异或的异或等于数据本身，这就是RC4最基本的出发点，</p>
+<p>即　A　xor　S　=　B,　B　xor　S　=　A</p>
+<p>上式中A表示待加密数据，S表示用于加密的密钥，又称 <strong>SBox</strong> ，B表示加密后的数据。</p>
+<p>当SBox是足够长(128)的随机序列时，很难在S未知的情况下由B计算出A。</p>
+<p>RC4中的SBox是由密钥key生成的伪随机序列，
+并且为了提高安全性，SBox在加解密过程中是 <strong>动态变化</strong> 的。</p>
+<p>因此，RC4算法主要包含两部分内容：</p>
+<blockquote>
+<ul class="simple">
+<li>伪随机序列SBox生成</li>
+<li>数据与SBox异或操作</li>
+</ul>
+</blockquote>
+</div>
+<div class="section" id="id3">
+<h2>RC4过程</h2>
+<div class="section" id="sbox">
+<h3>SBox生成</h3>
+<p>以256长度的SBox为例来理解一下RC4中伪随机序列的生成。</p>
+<p>RC4中定义了两个过程来生成随机数，即KSA与PRGA。</p>
+<div class="section" id="key-scheduling-algorithm-ksa">
+<h4>Key-scheduling algorithm(KSA)</h4>
+<div class="highlight"><pre><span></span><span class="n">key</span> <span class="o">=</span> <span class="s1">&#39;my is key&#39;</span>
+<span class="n">keylen</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+
+<span class="n">SBox</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">256</span><span class="p">)</span>
+<span class="n">j</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">256</span><span class="p">):</span>
+    <span class="n">j</span> <span class="o">=</span> <span class="p">(</span><span class="n">j</span> <span class="o">+</span> <span class="n">SBox</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="nb">ord</span><span class="p">(</span><span class="n">key</span><span class="p">[</span><span class="n">i</span> <span class="o">%</span> <span class="n">keylen</span><span class="p">]))</span> <span class="o">%</span> <span class="mi">256</span>
+    <span class="n">SBox</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">_SBox</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">_SBox</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">_SBox</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+</pre></div>
+<p>首先将0~255放入SBox中，然后打乱其循序。
+key在这里面的作用就是用来打乱SBox的。
+这也是key在RC4算法中唯一出现的地方。</p>
+</div>
+<div class="section" id="pseudo-random-generation-algorithm-prga">
+<h4>Pseudo-random generation algorithm(PRGA)</h4>
+<div class="highlight"><pre><span></span><span class="n">I</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">J</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+    <span class="n">I</span> <span class="o">=</span> <span class="p">(</span><span class="n">I</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="mi">256</span>
+    <span class="n">J</span> <span class="o">=</span> <span class="p">(</span><span class="n">J</span> <span class="o">+</span> <span class="n">SBox</span><span class="p">[</span><span class="n">I</span><span class="p">])</span> <span class="o">%</span> <span class="mi">256</span>
+    <span class="n">SBox</span><span class="p">[</span><span class="n">I</span><span class="p">],</span> <span class="n">SBox</span><span class="p">[</span><span class="n">J</span><span class="p">]</span> <span class="o">=</span> <span class="n">SBox</span><span class="p">[</span><span class="n">J</span><span class="p">],</span> <span class="n">SBox</span><span class="p">[</span><span class="n">I</span><span class="p">]</span>
+    <span class="n">oper</span> <span class="o">=</span> <span class="n">SBox</span><span class="p">[(</span><span class="n">SBox</span><span class="p">[</span><span class="n">I</span><span class="p">]</span> <span class="o">+</span> <span class="n">SBox</span><span class="p">[</span><span class="n">J</span><span class="p">])</span> <span class="o">%</span> <span class="mi">256</span><span class="p">]</span>
+    <span class="k">yield</span> <span class="n">oper</span>
+</pre></div>
+<p>PRGA这个过程产生一个字节，用于与数据进行异或。
+每产生一个字节，SBox都会变化。
+上述代码返回一个生成器。
+也可以根据要加密的数据长度直接返回一个字节序列。</p>
+<p>RC4中利用上述两个过程产生了伪随机序列，供接下来的
+异或操作来使用。
+这个伪随机长生方式也曾被用于FreeBSD，Linux，Mac　OSX。</p>
+</div>
+</div>
+<div class="section" id="id4">
+<h3>异或操作</h3>
+<p>将得到的伪随机序列与待加密数据异或即可。</p>
+<div class="highlight"><pre><span></span><span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">buffer</span><span class="p">:</span>
+    <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">chr</span><span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">^</span> <span class="n">generator</span><span class="o">.</span><span class="n">next</span><span class="p">()))</span>
+<span class="k">return</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+</pre></div>
+<p>其中的generator是前述步骤PRGA返回的发生器。</p>
+<p>到此，数据加密完成,解密执行同样的步骤即可。</p>
+<p>需要注意的是，RC4虽然是流加密算法，但由于SBox是实时变化的，
+因此即便持有key也必须从数据头开始解密。</p>
+<p>也就是说 <strong>加密与解密在数据上需要同步进行</strong> 。</p>
+<p>文中的代码为解释说明而进行了简化，</p>
+<p>可正常工作的版本请参考项目OrTunnel中的Tools/Crypt.py文件。
+放在：</p>
+<p><a class="reference external" href="https://github.com/lixingke3650/OrTunnel">https://github.com/lixingke3650/OrTunnel</a></p>
+<p>以上。
+20150228</p>
+<p>担心。</p>
+</div>
+</div>
+
+            </div><!-- /.entry-content -->
+            <div class="comments">
+              <h3>Comments</h3>
+              <div id="disqus_thread"></div>
+              <script type="text/javascript">
+                var disqus_identifier = "rc4jia-mi-suan-fa-ji-shi-xian.html";
+                (function() {
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = 'https://lixingke3650-githubblog.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+              </script>
+            </div>
+
+
+        </div><!-- /.eleven.columns -->
+
+<div class="three columns">
+
+
+<h4>Categories</h4>
+<ul class="blank">
+		<li><a href="/category/ri-ji.html">日记</a></li>
+		<li><a href="/category/xiang-mu.html">项目</a></li>
+		<li><a href="/category/xue-xi.html">学习</a></li>
+		<li><a href="/category/zheng-li.html">整理</a></li>
+</ul>
+
+
+<h4>Tags</h4>
+	<ul class="blank">
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/pptp.html">PPTP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69daf0b8>]"><a href="/tag/utf-8.html">UTF-8</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69ac5cf8>]"><a href="/tag/nfc.html">NFC</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d77240>]"><a href="/tag/apache.html">Apache</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f6854cf28>]"><a href="/tag/markdown.html">Markdown</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69b5d0f0>]"><a href="/tag/dropbox.html">Dropbox</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/vps.html">VPS</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69ce0198>]"><a href="/tag/zui-duan-lu-jing.html">最短路径</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d77240>]"><a href="/tag/fms.html">FMS</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c88198>, <pelican.contents.Article object at 0x2b9f69dc7da0>]"><a href="/tag/rc4.html">RC4</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c756d8>, <pelican.contents.Article object at 0x2b9f69b55fd0>]"><a href="/tag/dai-li.html">代理</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69daf0b8>]"><a href="/tag/bytesstr.html">bytes&amp;str</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69cc77b8>]"><a href="/tag/ba-huang-hou.html">八皇后</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69907dd8>]"><a href="/tag/kuai-su-pai-xu.html">快速排序</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c447b8>]"><a href="/tag/orpsf.html">OrPSF</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69daf0b8>]"><a href="/tag/zi-fu-bian-ma.html">字符编码</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f68544b70>]"><a href="/tag/ha-fu-man-bian-ma.html">哈夫曼编码</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d777f0>]"><a href="/tag/guo-min-xing-bi-yan.html">过敏性鼻炎</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d77e48>]"><a href="/tag/clexe.html">CL.exe</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/vpn.html">VPN</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f6854cf28>]"><a href="/tag/restructuredtext.html">reStructuredText</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c447b8>]"><a href="/tag/sftp.html">SFTP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69abac18>]"><a href="/tag/man-che-si-te-bian-ma.html">曼彻斯特编码</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f68563128>]"><a href="/tag/start-stop-daemon.html">start-stop-daemon</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d18e10>]"><a href="/tag/homebrew.html">Homebrew</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69abac18>]"><a href="/tag/tong-xin-yuan-li.html">通信原理</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69dc7da0>]"><a href="/tag/jia-jie-mi.html">加解密</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d18e10>]"><a href="/tag/mac.html">Mac</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c756d8>, <pelican.contents.Article object at 0x2b9f69daf0b8>, <pelican.contents.Article object at 0x2b9f69baea20>, <pelican.contents.Article object at 0x2b9f69b55fd0>, <pelican.contents.Article object at 0x2b9f69c68320>]"><a href="/tag/python.html">Python</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69a22b38>]"><a href="/tag/nginx.html">Nginx</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69b5d0f0>, <pelican.contents.Article object at 0x2b9f69b876a0>, <pelican.contents.Article object at 0x2b9f69c4fc18>]"><a href="/tag/pelican.html">Pelican</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69bf7780>, <pelican.contents.Article object at 0x2b9f69c62278>, <pelican.contents.Article object at 0x2b9f69907dd8>, <pelican.contents.Article object at 0x2b9f68544b70>, <pelican.contents.Article object at 0x2b9f69cc77b8>, <pelican.contents.Article object at 0x2b9f69ce0198>]"><a href="/tag/suan-fa.html">算法</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69a97240>, <pelican.contents.Article object at 0x2b9f69d77240>]"><a href="/tag/php.html">PHP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d76f28>]"><a href="/tag/apjp.html">APJP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69daf0b8>]"><a href="/tag/ucs.html">UCS</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d76f28>]"><a href="/tag/bae.html">BAE</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/openvpn.html">OpenVPN</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69daf160>]"><a href="/tag/you.html">YOU</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d18898>]"><a href="/tag/rtorrent.html">rTorrent</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f68563128>, <pelican.contents.Article object at 0x2b9f69cf7240>, <pelican.contents.Article object at 0x2b9f69a22b38>, <pelican.contents.Article object at 0x2b9f69dbd908>, <pelican.contents.Article object at 0x2b9f69d77240>]"><a href="/tag/linux.html">Linux</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/ipsec.html">IPSec</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69dc7da0>]"><a href="/tag/arc4.html">ARC4</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69b1a7b8>]"><a href="/tag/except.html">except</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c88198>]"><a href="/tag/tls.html">TLS</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69b5d0f0>]"><a href="/tag/blog.html">Blog</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69fe5dd8>, <pelican.contents.Article object at 0x2b9f69a97240>]"><a href="/tag/postgresql.html">PostgreSQL</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c58978>]"><a href="/tag/grub.html">GRUB</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c88198>]"><a href="/tag/ortunnel.html">OrTunnel</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c88198>]"><a href="/tag/ssl.html">SSL</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69daf0b8>]"><a href="/tag/unicode.html">Unicode</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69adbe80>]"><a href="/tag/p2p.html">P2P</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d83588>]"><a href="/tag/http.html">HTTP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69a97240>]"><a href="/tag/iis.html">IIS</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69cc77b8>, <pelican.contents.Article object at 0x2b9f69ce0198>]"><a href="/tag/hui-su.html">回溯</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69adbe80>]"><a href="/tag/nei-wang-chuan-tou.html">内网穿透</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c756d8>, <pelican.contents.Article object at 0x2b9f69b55fd0>]"><a href="/tag/orro.html">ORRO</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/l2tp.html">L2TP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69b1a7b8>]"><a href="/tag/zi-dong-jiao-hu.html">自动交互</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d77e48>]"><a href="/tag/sublime.html">Sublime</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c4fc18>]"><a href="/tag/github.html">GitHub</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69fe5dd8>]"><a href="/tag/shu-ju-ku.html">数据库</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/ppp.html">PPP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69ab5630>]"><a href="/tag/tu-cheng.html">土成</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69dbd908>]"><a href="/tag/security.html">Security</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f68563128>]"><a href="/tag/ormonitor.html">OrMonitor</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f68544b70>]"><a href="/tag/ha-fu-man-shu.html">哈夫曼树</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69adbe80>]"><a href="/tag/im.html">IM</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69cf7240>]"><a href="/tag/gunicorn.html">Gunicorn</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69a97240>]"><a href="/tag/mysql.html">MySQL</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c88198>]"><a href="/tag/tunnel.html">tunnel</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c68320>]"><a href="/tag/web.html">Web</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c9e5f8>]"><a href="/tag/liu-mei-ti.html">流媒体</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69ac5cf8>]"><a href="/tag/felica.html">Felica</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d77240>]"><a href="/tag/centos.html">CentOS</a></li>
+</ul>
+
+<nav class="widget">
+  <h4>Social</h4>
+  <ul class="blank">
+    <li><a href="http://github.com/lixingke3650">github</a></li>
+  </ul>
+</nav>
+
+</div> </div><!-- /.row -->
+
+
+</section>
+
+       </div><!-- /.row -->
+    </div><!-- /.container -->
+
+
+       <div class="container.nopad bg">
+
+    
+        <footer id="credits" class="row">
+          <div class="seven columns left-center">
+
+                   <address id="about" class="vcard body">
+                    &copy; Copyright 2016, Hanbin 
+                    <br />
+                    Proudly powered by <a href="http://getpelican.com/">Pelican</a>,
+                    which takes great advantage of <a href="http://python.org">Python</a>.
+                    <br />
+                    Based on the <a target="_blank" href="http://gumbyframework.com">Gumby Framework</a>
+                    </address>
+          </div>
+
+
+          <div class="seven columns">
+            <div class="row">
+              <ul class="socbtns">
+
+                <li><div class="btn primary"><a href="http://github.com/lixingke3650/" target="_blank">Github</a></div></li>
+
+
+
+
+              </ul>
+            </div>
+          </div>
+        </footer>
+
+    </div>
+
+
+<script type="text/javascript">
+    var disqus_shortname = 'lixingke3650-githubblog';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+  <script src="/theme/js/libs/jquery-1.9.1.min.js"></script>
+  <script src="/theme/js/libs/gumby.min.js"></script>
+  <script src="/theme/js/plugins.js"></script>
+</body>
+</html>

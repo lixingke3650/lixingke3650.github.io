@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="jp">
+<head>
+
+        <title>买书问题求解</title>
+        <meta charset="utf-8" />
+
+
+        <!-- Mobile viewport optimized: j.mp/bplateviewport -->
+        <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1">
+
+        <link rel="stylesheet" type="text/css" href="/theme/gumby.css" />
+        <link rel="stylesheet" type="text/css" href="/theme/style.css" />
+        <link rel="stylesheet" type="text/css" href="/theme/pygment.css" />
+
+        <script src="/theme/js/libs/modernizr-2.6.2.min.js"></script>
+
+
+
+
+</head>
+
+<body id="index" class="home">
+
+
+    <div class="container">
+
+        <div class="row">
+
+          <header id="banner" class="body">
+                  <h1><a href="/">lixingke3650 <strong></strong></a></h1>
+          </header><!-- /#banner -->
+
+            <div id="navigation" class="navbar row">
+              <a href="#" gumby-trigger="#navigation &gt; ul" class="toggle"><i class="icon-menu"></i></a>
+             
+              <ul class="columns">
+                <li><a href="/">Home</a></li>
+
+                  <li><a href="/category/ri-ji.html">日记</a></li>
+                  <li><a href="/category/xiang-mu.html">项目</a></li>
+                  <li class="active"><a href="/category/xue-xi.html">学习</a></li>
+                  <li><a href="/category/zheng-li.html">整理</a></li>
+
+              </ul>
+            </div>
+
+<section id="content" class="body">
+
+   <div class="row">
+        <div class="eleven columns">
+
+
+            <header>
+              <h2 class="entry-title">
+                <a href="/mai-shu-wen-ti-qiu-jie.html" rel="bookmark"
+                   title="Permalink to 买书问题求解">买书问题求解</a></h2>
+           
+            </header>
+            <footer class="post-info">
+              <abbr class="published" title="2014-07-28T20:00:00+09:00">
+                Mon 28 July 2014
+              </abbr>
+              <address class="vcard author">By 
+                <a class="url fn" href="/author/hanbin.html"> Hanbin</a>
+              </address>
+            </footer><!-- /.post-info -->
+            <div class="entry-content">
+              <div class="section" id="id1">
+<h2>买书问题</h2>
+<p>某一系列图书共有5卷，每卷单独购买需要8元，若一次购买不同的两卷，则享受5%的优惠，
+三卷则更多.具体如下：</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">本数</th>
+<th class="head">折扣</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>2</td>
+<td>5%</td>
+</tr>
+<tr><td>3</td>
+<td>10%</td>
+</tr>
+<tr><td>4</td>
+<td>20%</td>
+</tr>
+<tr><td>5</td>
+<td>25%</td>
+</tr>
+</tbody>
+</table>
+<p>同样一份订单中，根据选择的折扣不同会有不同的价格总额。设计一个算法，求出最合算的购买方式及总价。</p>
+<p>例如： 购买卷一两本，卷二两本，卷三两本，卷四一本，卷五一本。</p>
+<p>若选择五卷折扣加三卷折扣总额为 <strong>5*8*0.75+3*8*0.9=51.6</strong></p>
+<p>若选择两个四卷折扣总额为 <strong>4*8*0.8*2=51.2</strong></p>
+<p>-- 来自《编程之美》</p>
+<div class="section" id="id2">
+<h3>求解思路</h3>
+<p>折扣方式的选择需根据前一次的选择来确定，比如说买一次五卷折扣剩下的书与买两次五卷折扣剩下的书不同，
+即剩下可能的选择方式也不同。这对这个特点，可用动态规划来尝试一下。
+假设在一次订单中选择5本折扣的数量为x5，4本折扣的数量为x4，剩下以此为x3,x2,x1,
+则总价为：x1*8 + 0.95*8*x2*2 + 0.9*8*x3*3 + 0.8*8*x4*4 + 0.75*8*x5*5;
+对x1到x5进行穷举即可找到最小的总额与选择方式。</p>
+<dl class="docutils">
+<dt>自己在写代码时遇到了几个问题：</dt>
+<dd>1.对x1~x5进行穷举，但如何可以尽量减少穷举的次数?比如x5的最大值不能比各种卷中购买数量最小的书还要大。
+2.当前一个选择方式确定以后，如何来确定本次的选择?</dd>
+</dl>
+<p>对于第一个问题，实际上是循环方法与循环次数的选取问题。</p>
+<p>为了方便说明，定义books1~books5为购买各卷书的册数。</p>
+<p>x5是5册书折扣的数量，对每卷书都有影响，将他放到第一层循环；
+x1是没有折扣的册书，应该在其他折扣选择完成后最后确定，将他放到最内层循环；
+由此，将循环层次定义成x5~x1.
+每层循环的次数，x5自然是购买的各卷书中最小的值(min(books))。
+当x5确定后，剩余书的册书也确定了，而x4的最大值可能是
+books中最小值与次小值的和再减去x5带来的影响(2*x5)。
+以此类推取得x3,x2的最大值，而x1的值可根据之前确定的x2,x3,x4,x5而算出。
+x1 = 总卷数 - 2*x2 -3*x3 -4*x4 -5*x5</p>
+<p>对于第二个问题可理解为，在穷举过程中，本次选择的方式是否是合理有效的。
+我没有去列举每一种可能的方式，而是在计算出总额以后判断在该方式下每种图书的
+数量是否是合理的。这种方式可能会增加遍历的次数，但却省去了对折扣方式选择的
+严格判断。代码会简单不少。</p>
+</div>
+<div class="section" id="id3">
+<h3>代码</h3>
+<p>下面为C代码，时间复杂度为 O(x1*x2*x3*x4*x5).</p>
+<p>&quot;QuickSort.h&quot;包含排序功能的头文件，请参考本博客快速排序的相关内容。</p>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;QuickSort.h&quot;</span><span class="cp"></span>
+
+
+<span class="cp">#define LENGTH 5</span>
+
+<span class="cm">/*******************************************/</span>
+<span class="cm">/* 购买卷数排序</span>
+<span class="cm">/*******************************************/</span>
+<span class="kt">int</span> <span class="nf">sortbooks</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span> <span class="n">books</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">quicksort</span><span class="p">(</span><span class="n">books</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">LENGTH</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="cm">/*******************************************/</span>
+<span class="cm">/* 总书卷数计算</span>
+<span class="cm">/*</span>
+<span class="cm">/* @parame</span>
+<span class="cm">/*    [in/   ] books: 书购买卷数列表</span>
+<span class="cm">/* @return</span>
+<span class="cm">/*    购买书总数</span>
+<span class="cm">/*******************************************/</span>
+<span class="kt">int</span> <span class="nf">sumfun</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span> <span class="n">books</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">ret</span><span class="p">;</span>
+
+    <span class="n">ret</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">LENGTH</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">ret</span> <span class="o">+=</span> <span class="n">books</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="n">ret</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="cm">/*******************************************/</span>
+<span class="cm">/* check01</span>
+<span class="cm">/* @parame</span>
+<span class="cm">/*    [in/   ]x1~x5: 各卷图书册书</span>
+<span class="cm">/*******************************************/</span>
+<span class="kt">int</span> <span class="nf">check</span><span class="p">(</span><span class="kt">int</span> <span class="n">x1</span><span class="p">,</span> <span class="kt">int</span> <span class="n">x2</span><span class="p">,</span> <span class="kt">int</span> <span class="n">x3</span><span class="p">,</span> <span class="kt">int</span> <span class="n">x4</span><span class="p">,</span> <span class="kt">int</span> <span class="n">x5</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">x1</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">x2</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">x3</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">x4</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">x5</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="cm">/*******************************************/</span>
+<span class="cm">/* 动态规划求解</span>
+<span class="cm">/* @parame</span>
+<span class="cm">/*    [in/   ] books: 已排序(min-&gt;max)的各卷书购买册书</span>
+<span class="cm">/*    [  /out] c1~c2: 总额最小情况下的折扣方式</span>
+<span class="cm">/*******************************************/</span>
+<span class="kt">float</span> <span class="nf">dynamicprog</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span> <span class="n">books</span><span class="p">,</span> <span class="kt">int</span><span class="o">*</span> <span class="n">c1</span><span class="p">,</span> <span class="kt">int</span><span class="o">*</span> <span class="n">c2</span><span class="p">,</span> <span class="kt">int</span><span class="o">*</span> <span class="n">c3</span><span class="p">,</span> <span class="kt">int</span><span class="o">*</span> <span class="n">c4</span><span class="p">,</span> <span class="kt">int</span><span class="o">*</span> <span class="n">c5</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="c1">// x1 ~ x5: 以打折方式购买书的卷数。例x5:购买5卷书(不同系列，组成打折套餐)的套数</span>
+    <span class="kt">int</span> <span class="n">i1</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">x1</span><span class="p">,</span><span class="n">x2</span><span class="p">,</span><span class="n">x3</span><span class="p">,</span><span class="n">x4</span><span class="p">,</span><span class="n">x5</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">num</span><span class="p">;</span>
+    <span class="kt">float</span> <span class="n">sum</span><span class="p">;</span>
+    <span class="kt">float</span> <span class="n">min</span><span class="p">;</span>
+
+    <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">min</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+    <span class="c1">// 总卷数</span>
+    <span class="n">num</span> <span class="o">=</span> <span class="n">sumfun</span><span class="p">(</span><span class="n">books</span><span class="p">);</span>
+    <span class="n">min</span> <span class="o">=</span> <span class="mi">8</span><span class="o">*</span><span class="n">num</span><span class="p">;</span>
+
+    <span class="c1">// 动态规划</span>
+    <span class="c1">// 购买册书已排序，books[0]为最少卷书的册数</span>
+    <span class="k">for</span><span class="p">(</span><span class="n">x5</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">x5</span><span class="o">&lt;=</span><span class="n">books</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span><span class="n">x5</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">for</span><span class="p">(</span><span class="n">x4</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">x4</span><span class="o">&lt;=</span><span class="p">(</span><span class="n">books</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">books</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span><span class="n">x4</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">for</span><span class="p">(</span><span class="n">x3</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">x3</span><span class="o">&lt;=</span><span class="p">(</span><span class="n">books</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">books</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">books</span><span class="p">[</span><span class="mi">2</span><span class="p">]);</span><span class="n">x3</span><span class="o">++</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">for</span><span class="p">(</span><span class="n">x2</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">x2</span><span class="o">&lt;=</span><span class="p">(</span><span class="n">books</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">books</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">books</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">+</span><span class="n">books</span><span class="p">[</span><span class="mi">3</span><span class="p">]);</span><span class="n">x2</span><span class="o">++</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">x1</span> <span class="o">=</span> <span class="n">num</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span><span class="n">x2</span> <span class="o">-</span><span class="mi">3</span><span class="o">*</span><span class="n">x3</span> <span class="o">-</span><span class="mi">4</span><span class="o">*</span><span class="n">x4</span> <span class="o">-</span><span class="mi">5</span><span class="o">*</span><span class="n">x5</span><span class="p">;</span>
+                    <span class="n">sum</span> <span class="o">=</span> <span class="n">x1</span><span class="o">*</span><span class="mi">8</span> <span class="o">+</span> <span class="mf">0.95</span><span class="o">*</span><span class="mi">8</span><span class="o">*</span><span class="n">x2</span><span class="o">*</span><span class="mi">2</span> <span class="o">+</span> <span class="mf">0.9</span><span class="o">*</span><span class="mi">8</span><span class="o">*</span><span class="n">x3</span><span class="o">*</span><span class="mi">3</span> <span class="o">+</span> <span class="mf">0.8</span><span class="o">*</span><span class="mi">8</span><span class="o">*</span><span class="n">x4</span><span class="o">*</span><span class="mi">4</span> <span class="o">+</span> <span class="mf">0.75</span><span class="o">*</span><span class="mi">8</span><span class="o">*</span><span class="n">x5</span><span class="o">*</span><span class="mi">5</span><span class="p">;</span>
+
+                    <span class="k">if</span> <span class="p">(</span><span class="n">sum</span> <span class="o">&lt;</span> <span class="n">min</span><span class="p">)</span>
+                    <span class="p">{</span>
+                        <span class="k">if</span><span class="p">(</span><span class="n">check</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span><span class="n">x2</span><span class="p">,</span><span class="n">x3</span><span class="p">,</span><span class="n">x4</span><span class="p">,</span><span class="n">x5</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+                        <span class="p">{</span>
+                            <span class="n">min</span> <span class="o">=</span> <span class="n">sum</span><span class="p">;</span>
+                            <span class="o">*</span><span class="n">c1</span> <span class="o">=</span> <span class="n">x1</span><span class="p">;</span>
+                            <span class="o">*</span><span class="n">c2</span> <span class="o">=</span> <span class="n">x2</span><span class="p">;</span>
+                            <span class="o">*</span><span class="n">c3</span> <span class="o">=</span> <span class="n">x3</span><span class="p">;</span>
+                            <span class="o">*</span><span class="n">c4</span> <span class="o">=</span> <span class="n">x4</span><span class="p">;</span>
+                            <span class="o">*</span><span class="n">c5</span> <span class="o">=</span> <span class="n">x5</span><span class="p">;</span>
+                        <span class="p">}</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="n">min</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="cm">/*******************************************/</span>
+<span class="cm">/* main</span>
+<span class="cm">/*******************************************/</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">books</span><span class="p">[</span><span class="n">LENGTH</span><span class="p">];</span>
+    <span class="kt">int</span> <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">x3</span><span class="p">,</span> <span class="n">x4</span><span class="p">,</span> <span class="n">x5</span><span class="p">;</span>
+    <span class="kt">float</span> <span class="n">ret</span><span class="p">;</span>
+
+    <span class="n">books</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="n">books</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="n">books</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="n">books</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="n">books</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="n">x1</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">x2</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">x3</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">x4</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">x5</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+    <span class="c1">// 各卷书价格相同，故无需考虑卷数与价格的对应关系</span>
+    <span class="c1">// 排序</span>
+    <span class="n">sortbooks</span><span class="p">(</span><span class="n">books</span><span class="p">);</span>
+    <span class="c1">// 动态规划求解</span>
+    <span class="n">ret</span> <span class="o">=</span> <span class="n">dynamicprog</span><span class="p">(</span><span class="n">books</span><span class="p">,</span><span class="o">&amp;</span><span class="n">x1</span><span class="p">,</span><span class="o">&amp;</span><span class="n">x2</span><span class="p">,</span><span class="o">&amp;</span><span class="n">x3</span><span class="p">,</span><span class="o">&amp;</span><span class="n">x4</span><span class="p">,</span><span class="o">&amp;</span><span class="n">x5</span><span class="p">);</span>
+
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;list: %d, %d, %d, %d, %d</span><span class="se">\r\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">x3</span><span class="p">,</span> <span class="n">x4</span><span class="p">,</span> <span class="n">x5</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;sum: %.1f</span><span class="se">\r\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">ret</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+<p>以上。</p>
+</div>
+</div>
+
+            </div><!-- /.entry-content -->
+            <div class="comments">
+              <h3>Comments</h3>
+              <div id="disqus_thread"></div>
+              <script type="text/javascript">
+                var disqus_identifier = "mai-shu-wen-ti-qiu-jie.html";
+                (function() {
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = 'https://lixingke3650-githubblog.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+              </script>
+            </div>
+
+
+        </div><!-- /.eleven.columns -->
+
+<div class="three columns">
+
+
+<h4>Categories</h4>
+<ul class="blank">
+		<li><a href="/category/ri-ji.html">日记</a></li>
+		<li><a href="/category/xiang-mu.html">项目</a></li>
+		<li><a href="/category/xue-xi.html">学习</a></li>
+		<li><a href="/category/zheng-li.html">整理</a></li>
+</ul>
+
+
+<h4>Tags</h4>
+	<ul class="blank">
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/pptp.html">PPTP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69daf0b8>]"><a href="/tag/utf-8.html">UTF-8</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69ac5cf8>]"><a href="/tag/nfc.html">NFC</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d77240>]"><a href="/tag/apache.html">Apache</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f6854cf28>]"><a href="/tag/markdown.html">Markdown</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69b5d0f0>]"><a href="/tag/dropbox.html">Dropbox</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/vps.html">VPS</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69ce0198>]"><a href="/tag/zui-duan-lu-jing.html">最短路径</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d77240>]"><a href="/tag/fms.html">FMS</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c88198>, <pelican.contents.Article object at 0x2b9f69dc7da0>]"><a href="/tag/rc4.html">RC4</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c756d8>, <pelican.contents.Article object at 0x2b9f69b55fd0>]"><a href="/tag/dai-li.html">代理</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69daf0b8>]"><a href="/tag/bytesstr.html">bytes&amp;str</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69cc77b8>]"><a href="/tag/ba-huang-hou.html">八皇后</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69907dd8>]"><a href="/tag/kuai-su-pai-xu.html">快速排序</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c447b8>]"><a href="/tag/orpsf.html">OrPSF</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69daf0b8>]"><a href="/tag/zi-fu-bian-ma.html">字符编码</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f68544b70>]"><a href="/tag/ha-fu-man-bian-ma.html">哈夫曼编码</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d777f0>]"><a href="/tag/guo-min-xing-bi-yan.html">过敏性鼻炎</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d77e48>]"><a href="/tag/clexe.html">CL.exe</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/vpn.html">VPN</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f6854cf28>]"><a href="/tag/restructuredtext.html">reStructuredText</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c447b8>]"><a href="/tag/sftp.html">SFTP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69abac18>]"><a href="/tag/man-che-si-te-bian-ma.html">曼彻斯特编码</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f68563128>]"><a href="/tag/start-stop-daemon.html">start-stop-daemon</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d18e10>]"><a href="/tag/homebrew.html">Homebrew</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69abac18>]"><a href="/tag/tong-xin-yuan-li.html">通信原理</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69dc7da0>]"><a href="/tag/jia-jie-mi.html">加解密</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d18e10>]"><a href="/tag/mac.html">Mac</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c756d8>, <pelican.contents.Article object at 0x2b9f69daf0b8>, <pelican.contents.Article object at 0x2b9f69baea20>, <pelican.contents.Article object at 0x2b9f69b55fd0>, <pelican.contents.Article object at 0x2b9f69c68320>]"><a href="/tag/python.html">Python</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69a22b38>]"><a href="/tag/nginx.html">Nginx</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69b5d0f0>, <pelican.contents.Article object at 0x2b9f69b876a0>, <pelican.contents.Article object at 0x2b9f69c4fc18>]"><a href="/tag/pelican.html">Pelican</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69bf7780>, <pelican.contents.Article object at 0x2b9f69c62278>, <pelican.contents.Article object at 0x2b9f69907dd8>, <pelican.contents.Article object at 0x2b9f68544b70>, <pelican.contents.Article object at 0x2b9f69cc77b8>, <pelican.contents.Article object at 0x2b9f69ce0198>]"><a href="/tag/suan-fa.html">算法</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69a97240>, <pelican.contents.Article object at 0x2b9f69d77240>]"><a href="/tag/php.html">PHP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d76f28>]"><a href="/tag/apjp.html">APJP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69daf0b8>]"><a href="/tag/ucs.html">UCS</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d76f28>]"><a href="/tag/bae.html">BAE</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/openvpn.html">OpenVPN</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69daf160>]"><a href="/tag/you.html">YOU</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d18898>]"><a href="/tag/rtorrent.html">rTorrent</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f68563128>, <pelican.contents.Article object at 0x2b9f69cf7240>, <pelican.contents.Article object at 0x2b9f69a22b38>, <pelican.contents.Article object at 0x2b9f69dbd908>, <pelican.contents.Article object at 0x2b9f69d77240>]"><a href="/tag/linux.html">Linux</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/ipsec.html">IPSec</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69dc7da0>]"><a href="/tag/arc4.html">ARC4</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69b1a7b8>]"><a href="/tag/except.html">except</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c88198>]"><a href="/tag/tls.html">TLS</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69b5d0f0>]"><a href="/tag/blog.html">Blog</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69fe5dd8>, <pelican.contents.Article object at 0x2b9f69a97240>]"><a href="/tag/postgresql.html">PostgreSQL</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c58978>]"><a href="/tag/grub.html">GRUB</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c88198>]"><a href="/tag/ortunnel.html">OrTunnel</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c88198>]"><a href="/tag/ssl.html">SSL</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69daf0b8>]"><a href="/tag/unicode.html">Unicode</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69adbe80>]"><a href="/tag/p2p.html">P2P</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d83588>]"><a href="/tag/http.html">HTTP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69a97240>]"><a href="/tag/iis.html">IIS</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69cc77b8>, <pelican.contents.Article object at 0x2b9f69ce0198>]"><a href="/tag/hui-su.html">回溯</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69adbe80>]"><a href="/tag/nei-wang-chuan-tou.html">内网穿透</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c756d8>, <pelican.contents.Article object at 0x2b9f69b55fd0>]"><a href="/tag/orro.html">ORRO</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/l2tp.html">L2TP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69b1a7b8>]"><a href="/tag/zi-dong-jiao-hu.html">自动交互</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d77e48>]"><a href="/tag/sublime.html">Sublime</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c4fc18>]"><a href="/tag/github.html">GitHub</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69fe5dd8>]"><a href="/tag/shu-ju-ku.html">数据库</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/ppp.html">PPP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69ab5630>]"><a href="/tag/tu-cheng.html">土成</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69dbd908>]"><a href="/tag/security.html">Security</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f68563128>]"><a href="/tag/ormonitor.html">OrMonitor</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f68544b70>]"><a href="/tag/ha-fu-man-shu.html">哈夫曼树</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69adbe80>]"><a href="/tag/im.html">IM</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69cf7240>]"><a href="/tag/gunicorn.html">Gunicorn</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69a97240>]"><a href="/tag/mysql.html">MySQL</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c88198>]"><a href="/tag/tunnel.html">tunnel</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c68320>]"><a href="/tag/web.html">Web</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c9e5f8>]"><a href="/tag/liu-mei-ti.html">流媒体</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69ac5cf8>]"><a href="/tag/felica.html">Felica</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d77240>]"><a href="/tag/centos.html">CentOS</a></li>
+</ul>
+
+<nav class="widget">
+  <h4>Social</h4>
+  <ul class="blank">
+    <li><a href="http://github.com/lixingke3650">github</a></li>
+  </ul>
+</nav>
+
+</div> </div><!-- /.row -->
+
+
+</section>
+
+       </div><!-- /.row -->
+    </div><!-- /.container -->
+
+
+       <div class="container.nopad bg">
+
+    
+        <footer id="credits" class="row">
+          <div class="seven columns left-center">
+
+                   <address id="about" class="vcard body">
+                    &copy; Copyright 2016, Hanbin 
+                    <br />
+                    Proudly powered by <a href="http://getpelican.com/">Pelican</a>,
+                    which takes great advantage of <a href="http://python.org">Python</a>.
+                    <br />
+                    Based on the <a target="_blank" href="http://gumbyframework.com">Gumby Framework</a>
+                    </address>
+          </div>
+
+
+          <div class="seven columns">
+            <div class="row">
+              <ul class="socbtns">
+
+                <li><div class="btn primary"><a href="http://github.com/lixingke3650/" target="_blank">Github</a></div></li>
+
+
+
+
+              </ul>
+            </div>
+          </div>
+        </footer>
+
+    </div>
+
+
+<script type="text/javascript">
+    var disqus_shortname = 'lixingke3650-githubblog';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+  <script src="/theme/js/libs/jquery-1.9.1.min.js"></script>
+  <script src="/theme/js/libs/gumby.min.js"></script>
+  <script src="/theme/js/plugins.js"></script>
+</body>
+</html>

@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="jp">
+<head>
+
+        <title>OrIM - IM类软件</title>
+        <meta charset="utf-8" />
+
+
+        <!-- Mobile viewport optimized: j.mp/bplateviewport -->
+        <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1">
+
+        <link rel="stylesheet" type="text/css" href="/theme/gumby.css" />
+        <link rel="stylesheet" type="text/css" href="/theme/style.css" />
+        <link rel="stylesheet" type="text/css" href="/theme/pygment.css" />
+
+        <script src="/theme/js/libs/modernizr-2.6.2.min.js"></script>
+
+
+
+
+</head>
+
+<body id="index" class="home">
+
+
+    <div class="container">
+
+        <div class="row">
+
+          <header id="banner" class="body">
+                  <h1><a href="/">lixingke3650 <strong></strong></a></h1>
+          </header><!-- /#banner -->
+
+            <div id="navigation" class="navbar row">
+              <a href="#" gumby-trigger="#navigation &gt; ul" class="toggle"><i class="icon-menu"></i></a>
+             
+              <ul class="columns">
+                <li><a href="/">Home</a></li>
+
+                  <li><a href="/category/ri-ji.html">日记</a></li>
+                  <li class="active"><a href="/category/xiang-mu.html">项目</a></li>
+                  <li><a href="/category/xue-xi.html">学习</a></li>
+                  <li><a href="/category/zheng-li.html">整理</a></li>
+
+              </ul>
+            </div>
+
+<section id="content" class="body">
+
+   <div class="row">
+        <div class="eleven columns">
+
+
+            <header>
+              <h2 class="entry-title">
+                <a href="/orim-imlei-ruan-jian.html" rel="bookmark"
+                   title="Permalink to OrIM - IM类软件">OrIM - IM类软件</a></h2>
+           
+            </header>
+            <footer class="post-info">
+              <abbr class="published" title="2014-07-04T20:00:00+09:00">
+                Fri 04 July 2014
+              </abbr>
+              <address class="vcard author">By 
+                <a class="url fn" href="/author/hanbin.html"> Hanbin</a>
+              </address>
+            </footer><!-- /.post-info -->
+            <div class="entry-content">
+              <p><strong>源码托管地址： https://github.com/lixingke3650/OrIM</strong>
+OrIM -- Python作成的IM类软件。</p>
+<div class="section" id="id1">
+<h2>简述</h2>
+<p>个人学习用。
+用Python写成，基于TCP协议。</p>
+</div>
+<div class="section" id="id2">
+<h2>现状</h2>
+<div class="section" id="id3">
+<h3>通信协议</h3>
+<p>为应对socket分包粘包的问题，采用如下通信协议，
+即“包头+包体长度+包体”的形式。</p>
+<blockquote>
+<strong>&#64; + 包体长度 + 包体</strong></blockquote>
+<p>其中包体长度为四个字符。</p>
+<ul>
+<li><dl class="first docutils">
+<dt>注： 暂未涉及Python中处理字节型数据的内容，</dt>
+<dd><p class="first last">故包头的标识符可能并不准确。后续将加入相关处理。</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+<div class="section" id="id4">
+<h3>控制协议</h3>
+<p>经通信协议解析后得到的数据格式如下：</p>
+<blockquote>
+<strong>&#64; + 命令符 + 命令参数</strong></blockquote>
+<p>有多个命令参数时以“ <strong>;</strong> ”区分。</p>
+<p>此为客户端与服务端通信的控制协议。
+系统中已定义的命令符包括：</p>
+<ul class="simple">
+<li>登录</li>
+<li>登录用户列表获取</li>
+<li>申请与指定用户会话</li>
+<li>会话应答(同意否)</li>
+<li>会话开始</li>
+</ul>
+<p>对应的参数分别为：</p>
+<ul class="simple">
+<li>登录ID</li>
+<li>空</li>
+<li>指定用户ID</li>
+<li>结果(0否1是) + 申请方ID</li>
+<li>会话服务器端口号+对方ID+通信认证</li>
+</ul>
+</div>
+<div class="section" id="id5">
+<h3>控制与会话分离处理</h3>
+<p>目前用户间会话都需要经过服务器转发，
+但服务器与用户间的控制通路与会话转发通路是分离的。
+或者说控制服务器与会话转发服务器是分离的。</p>
+</div>
+<div class="section" id="id6">
+<h3>服务端会话对持有</h3>
+<p>会话服务对每一对会话中的用户都持有一个控制实例(考虑大量用户的情况)。
+包含双方的ID与socket.</p>
+</div>
+<div class="section" id="id7">
+<h3>客户端会话对持有</h3>
+<p>客户端为每一个会话中的对象持有一个会话对。
+包含会话服务器IP,Port,对方的ID,会话认证等。</p>
+</div>
+<div class="section" id="id8">
+<h3>流程</h3>
+<p>客户端流程：</p>
+<blockquote>
+<strong>登录 -&gt; 会话请求并等待同意 -&gt; 分配会话对实例并连接会话服务器 -&gt; 会话开始</strong></blockquote>
+<p>服务端流程：</p>
+<blockquote>
+<p><strong>等待客户端命令 -&gt; 相关处理</strong></p>
+<p><strong>用户连接请求 -&gt; 将登录用户加入用户列表</strong></p>
+<p><strong>登录用户列表请求 -&gt; 回复已登录的用户列表</strong></p>
+<p><strong>会话请求 -&gt; 向被申请方发送请求并等待 -&gt; 将结果回复给请求方 -&gt; 若同意则创建会话对等待双方加入 -&gt; 会话开始</strong></p>
+</blockquote>
+</div>
+<div class="section" id="ui">
+<h3>UI</h3>
+<p>目前是命令行形式，执行结果如下图(点击查看)：</p>
+<p><a class="reference external" href="./resource/img/OrIM-聊天工具/运行样图.png">image1</a></p>
+</div>
+<div class="section" id="id9">
+<h3>待解决的问题</h3>
+<ul class="simple">
+<li>字节及网络传输的处理</li>
+<li>UI</li>
+<li>P2P通信</li>
+</ul>
+<p>20140704</p>
+<p>以上。</p>
+<hr class="docutils" />
+<p>目前经服务器中转已经可以实现通信。
+开发中的功能:</p>
+<ul class="simple">
+<li>Tcp分包，粘包处理</li>
+<li>控制协议</li>
+<li>内网穿透</li>
+</ul>
+<p>更新于 20140630</p>
+<p>以上。</p>
+</div>
+</div>
+
+            </div><!-- /.entry-content -->
+            <div class="comments">
+              <h3>Comments</h3>
+              <div id="disqus_thread"></div>
+              <script type="text/javascript">
+                var disqus_identifier = "orim-imlei-ruan-jian.html";
+                (function() {
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = 'https://lixingke3650-githubblog.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+              </script>
+            </div>
+
+
+        </div><!-- /.eleven.columns -->
+
+<div class="three columns">
+
+
+<h4>Categories</h4>
+<ul class="blank">
+		<li><a href="/category/ri-ji.html">日记</a></li>
+		<li><a href="/category/xiang-mu.html">项目</a></li>
+		<li><a href="/category/xue-xi.html">学习</a></li>
+		<li><a href="/category/zheng-li.html">整理</a></li>
+</ul>
+
+
+<h4>Tags</h4>
+	<ul class="blank">
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/pptp.html">PPTP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69daf0b8>]"><a href="/tag/utf-8.html">UTF-8</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69ac5cf8>]"><a href="/tag/nfc.html">NFC</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d77240>]"><a href="/tag/apache.html">Apache</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f6854cf28>]"><a href="/tag/markdown.html">Markdown</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69b5d0f0>]"><a href="/tag/dropbox.html">Dropbox</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/vps.html">VPS</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69ce0198>]"><a href="/tag/zui-duan-lu-jing.html">最短路径</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d77240>]"><a href="/tag/fms.html">FMS</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c88198>, <pelican.contents.Article object at 0x2b9f69dc7da0>]"><a href="/tag/rc4.html">RC4</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c756d8>, <pelican.contents.Article object at 0x2b9f69b55fd0>]"><a href="/tag/dai-li.html">代理</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69daf0b8>]"><a href="/tag/bytesstr.html">bytes&amp;str</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69cc77b8>]"><a href="/tag/ba-huang-hou.html">八皇后</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69907dd8>]"><a href="/tag/kuai-su-pai-xu.html">快速排序</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c447b8>]"><a href="/tag/orpsf.html">OrPSF</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69daf0b8>]"><a href="/tag/zi-fu-bian-ma.html">字符编码</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f68544b70>]"><a href="/tag/ha-fu-man-bian-ma.html">哈夫曼编码</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d777f0>]"><a href="/tag/guo-min-xing-bi-yan.html">过敏性鼻炎</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d77e48>]"><a href="/tag/clexe.html">CL.exe</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/vpn.html">VPN</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f6854cf28>]"><a href="/tag/restructuredtext.html">reStructuredText</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c447b8>]"><a href="/tag/sftp.html">SFTP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69abac18>]"><a href="/tag/man-che-si-te-bian-ma.html">曼彻斯特编码</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f68563128>]"><a href="/tag/start-stop-daemon.html">start-stop-daemon</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d18e10>]"><a href="/tag/homebrew.html">Homebrew</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69abac18>]"><a href="/tag/tong-xin-yuan-li.html">通信原理</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69dc7da0>]"><a href="/tag/jia-jie-mi.html">加解密</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d18e10>]"><a href="/tag/mac.html">Mac</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c756d8>, <pelican.contents.Article object at 0x2b9f69daf0b8>, <pelican.contents.Article object at 0x2b9f69baea20>, <pelican.contents.Article object at 0x2b9f69b55fd0>, <pelican.contents.Article object at 0x2b9f69c68320>]"><a href="/tag/python.html">Python</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69a22b38>]"><a href="/tag/nginx.html">Nginx</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69b5d0f0>, <pelican.contents.Article object at 0x2b9f69b876a0>, <pelican.contents.Article object at 0x2b9f69c4fc18>]"><a href="/tag/pelican.html">Pelican</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69bf7780>, <pelican.contents.Article object at 0x2b9f69c62278>, <pelican.contents.Article object at 0x2b9f69907dd8>, <pelican.contents.Article object at 0x2b9f68544b70>, <pelican.contents.Article object at 0x2b9f69cc77b8>, <pelican.contents.Article object at 0x2b9f69ce0198>]"><a href="/tag/suan-fa.html">算法</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69a97240>, <pelican.contents.Article object at 0x2b9f69d77240>]"><a href="/tag/php.html">PHP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d76f28>]"><a href="/tag/apjp.html">APJP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69daf0b8>]"><a href="/tag/ucs.html">UCS</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d76f28>]"><a href="/tag/bae.html">BAE</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/openvpn.html">OpenVPN</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69daf160>]"><a href="/tag/you.html">YOU</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d18898>]"><a href="/tag/rtorrent.html">rTorrent</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f68563128>, <pelican.contents.Article object at 0x2b9f69cf7240>, <pelican.contents.Article object at 0x2b9f69a22b38>, <pelican.contents.Article object at 0x2b9f69dbd908>, <pelican.contents.Article object at 0x2b9f69d77240>]"><a href="/tag/linux.html">Linux</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/ipsec.html">IPSec</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69dc7da0>]"><a href="/tag/arc4.html">ARC4</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69b1a7b8>]"><a href="/tag/except.html">except</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c88198>]"><a href="/tag/tls.html">TLS</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69b5d0f0>]"><a href="/tag/blog.html">Blog</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69fe5dd8>, <pelican.contents.Article object at 0x2b9f69a97240>]"><a href="/tag/postgresql.html">PostgreSQL</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c58978>]"><a href="/tag/grub.html">GRUB</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c88198>]"><a href="/tag/ortunnel.html">OrTunnel</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c88198>]"><a href="/tag/ssl.html">SSL</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69daf0b8>]"><a href="/tag/unicode.html">Unicode</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69adbe80>]"><a href="/tag/p2p.html">P2P</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d83588>]"><a href="/tag/http.html">HTTP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69a97240>]"><a href="/tag/iis.html">IIS</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69cc77b8>, <pelican.contents.Article object at 0x2b9f69ce0198>]"><a href="/tag/hui-su.html">回溯</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69adbe80>]"><a href="/tag/nei-wang-chuan-tou.html">内网穿透</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c756d8>, <pelican.contents.Article object at 0x2b9f69b55fd0>]"><a href="/tag/orro.html">ORRO</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/l2tp.html">L2TP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69b1a7b8>]"><a href="/tag/zi-dong-jiao-hu.html">自动交互</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d77e48>]"><a href="/tag/sublime.html">Sublime</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c4fc18>]"><a href="/tag/github.html">GitHub</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69fe5dd8>]"><a href="/tag/shu-ju-ku.html">数据库</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/ppp.html">PPP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69ab5630>]"><a href="/tag/tu-cheng.html">土成</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69dbd908>]"><a href="/tag/security.html">Security</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f68563128>]"><a href="/tag/ormonitor.html">OrMonitor</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f68544b70>]"><a href="/tag/ha-fu-man-shu.html">哈夫曼树</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69adbe80>]"><a href="/tag/im.html">IM</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69cf7240>]"><a href="/tag/gunicorn.html">Gunicorn</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69a97240>]"><a href="/tag/mysql.html">MySQL</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c88198>]"><a href="/tag/tunnel.html">tunnel</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c68320>]"><a href="/tag/web.html">Web</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c9e5f8>]"><a href="/tag/liu-mei-ti.html">流媒体</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69ac5cf8>]"><a href="/tag/felica.html">Felica</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d77240>]"><a href="/tag/centos.html">CentOS</a></li>
+</ul>
+
+<nav class="widget">
+  <h4>Social</h4>
+  <ul class="blank">
+    <li><a href="http://github.com/lixingke3650">github</a></li>
+  </ul>
+</nav>
+
+</div> </div><!-- /.row -->
+
+
+</section>
+
+       </div><!-- /.row -->
+    </div><!-- /.container -->
+
+
+       <div class="container.nopad bg">
+
+    
+        <footer id="credits" class="row">
+          <div class="seven columns left-center">
+
+                   <address id="about" class="vcard body">
+                    &copy; Copyright 2016, Hanbin 
+                    <br />
+                    Proudly powered by <a href="http://getpelican.com/">Pelican</a>,
+                    which takes great advantage of <a href="http://python.org">Python</a>.
+                    <br />
+                    Based on the <a target="_blank" href="http://gumbyframework.com">Gumby Framework</a>
+                    </address>
+          </div>
+
+
+          <div class="seven columns">
+            <div class="row">
+              <ul class="socbtns">
+
+                <li><div class="btn primary"><a href="http://github.com/lixingke3650/" target="_blank">Github</a></div></li>
+
+
+
+
+              </ul>
+            </div>
+          </div>
+        </footer>
+
+    </div>
+
+
+<script type="text/javascript">
+    var disqus_shortname = 'lixingke3650-githubblog';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+  <script src="/theme/js/libs/jquery-1.9.1.min.js"></script>
+  <script src="/theme/js/libs/gumby.min.js"></script>
+  <script src="/theme/js/plugins.js"></script>
+</body>
+</html>

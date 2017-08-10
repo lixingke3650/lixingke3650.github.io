@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="jp">
+<head>
+
+        <title>pelican主题设置</title>
+        <meta charset="utf-8" />
+
+
+        <!-- Mobile viewport optimized: j.mp/bplateviewport -->
+        <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1">
+
+        <link rel="stylesheet" type="text/css" href="/theme/gumby.css" />
+        <link rel="stylesheet" type="text/css" href="/theme/style.css" />
+        <link rel="stylesheet" type="text/css" href="/theme/pygment.css" />
+
+        <script src="/theme/js/libs/modernizr-2.6.2.min.js"></script>
+
+
+
+
+</head>
+
+<body id="index" class="home">
+
+
+    <div class="container">
+
+        <div class="row">
+
+          <header id="banner" class="body">
+                  <h1><a href="/">lixingke3650 <strong></strong></a></h1>
+          </header><!-- /#banner -->
+
+            <div id="navigation" class="navbar row">
+              <a href="#" gumby-trigger="#navigation &gt; ul" class="toggle"><i class="icon-menu"></i></a>
+             
+              <ul class="columns">
+                <li><a href="/">Home</a></li>
+
+                  <li><a href="/category/ri-ji.html">日记</a></li>
+                  <li><a href="/category/xiang-mu.html">项目</a></li>
+                  <li><a href="/category/xue-xi.html">学习</a></li>
+                  <li class="active"><a href="/category/zheng-li.html">整理</a></li>
+
+              </ul>
+            </div>
+
+<section id="content" class="body">
+
+   <div class="row">
+        <div class="eleven columns">
+
+
+            <header>
+              <h2 class="entry-title">
+                <a href="/pelicanzhu-ti-she-zhi.html" rel="bookmark"
+                   title="Permalink to pelican主题设置">pelican主题设置</a></h2>
+           
+            </header>
+            <footer class="post-info">
+              <abbr class="published" title="2014-05-20T16:00:00+09:00">
+                Tue 20 May 2014
+              </abbr>
+              <address class="vcard author">By 
+                <a class="url fn" href="/author/hanbin.html"> Hanbin</a>
+              </address>
+            </footer><!-- /.post-info -->
+            <div class="entry-content">
+              <div class="section" id="pelican">
+<h2>pelican主题</h2>
+<p>打算将pelican默认主题换掉。</p>
+<p>下面这个页面中有大量第三方开发的主题</p>
+<blockquote>
+<a class="reference external" href="https://github.com/getpelican/pelican-themes">https://github.com/getpelican/pelican-themes</a></blockquote>
+<p>下载下来后通过如下命令进行安装:</p>
+<blockquote>
+pelican-themes -i [themes-path]</blockquote>
+<p>(关于pelican-themes更详细说明请参考: <a class="reference external" href="http://frantic1048.com/fan-yi-pelican-themesguan-fang-wen-dang.html">http://frantic1048.com/fan-yi-pelican-themesguan-fang-wen-dang.html</a> )</p>
+<p>安装时出现如下错误提示:</p>
+<pre class="literal-block">
+File &quot;C:\Program Files\Python\Python2\Scripts\pelican-themes-script.py&quot;, line 14, in &lt;module&gt;
+  load_entry_point('pelican==3.3', 'console_scripts', 'pelican-themes')()
+File &quot;C:\Program Files\Python\Python2\lib\site-packages\pelican\tools\pelican_themes.py&quot;, line 97, in main
+  install(i, v=args.verbose)
+File &quot;C:\Program Files\Python\Python2\lib\site-packages\pelican\tools\pelican_themes.py&quot;, line 208, in install
+  err(&quot;Cannot copy `{p}' to `{t}':\n{e}&quot;.format(p=path, t=theme_path, e=str(e)))
+File &quot;C:\Program Files\Python\Python2\lib\encodings\utf_8.py&quot;, line 16, in decode
+  return codecs.utf_8_decode(input, errors, True)
+UnicodeDecodeError: 'utf8' codec can't decode byte 0x83 in position 10: invalid start byte
+</pre>
+<p>起初以为是编码问题，将sys.setdefaultencoding('utf8')加入到pelican_themes.py脚本中问题依旧。
+仔细查看发现pelican_themes.py中一句复制命令抛出异常。
+自带的脚本不至于会出错，那就是我电脑的问题了。
+手动复制一次发现需要管理员权限进行确认，问题找到了:</p>
+<ul class="simple">
+<li><strong>pelican_themes.py -i</strong> 命令将主题文件复制到Python安装路径下</li>
+<li>我的Python安装在C盘中，被系统认为是敏感文件，必须有一定权限才能访问</li>
+</ul>
+<p>手动操作时可以点击确认按钮以继续复制，但脚本中如何实现呢。(未查阅资料)</p>
+<p>解决办法:</p>
+<ul class="simple">
+<li>修改脚本绕开或实现权限确认 -- 须查阅资料，不过估计不可行</li>
+<li>对当前用户赋予该目录(Python)的读写权限</li>
+</ul>
+<p>将如下内容加入注册表，右键Python目录可获得该目录管理员权限。</p>
+<pre class="literal-block">
+Windows Registry Editor Version 5.00
+[HKEY_CLASSES_ROOT\*\shell\runas]
+&#64;=&quot;获取管理员权限&quot;
+&quot;NoWorkingDirectory&quot;=&quot;&quot;
+[HKEY_CLASSES_ROOT\*\shell\runas\command]
+&#64;=&quot;cmd.exe /c takeown /f \&quot;%1\&quot; &amp; icacls \&quot;%1\&quot; /grant administrators:F&quot;
+&quot;IsolatedCommand&quot;=&quot;cmd.exe /c takeown /f \&quot;%1\&quot; &amp; icacls \&quot;%1\&quot; /grant administrators:F&quot;
+[HKEY_CLASSES_ROOT\exefile\shell\runas2]
+&#64;=&quot;获取管理员权限&quot;
+&quot;NoWorkingDirectory&quot;=&quot;&quot;
+[HKEY_CLASSES_ROOT\exefile\shell\runas2\command]
+&#64;=&quot;cmd.exe /c takeown /f \&quot;%1\&quot; &amp; icacls \&quot;%1\&quot; /grant administrators:F&quot;
+&quot;IsolatedCommand&quot;=&quot;cmd.exe /c takeown /f \&quot;%1\&quot; &amp; icacls \&quot;%1\&quot; /grant administrators:F&quot;
+[HKEY_CLASSES_ROOT\Directory\shell\runas]
+&#64;=&quot;获取管理员权限&quot;
+&quot;NoWorkingDirectory&quot;=&quot;&quot;
+[HKEY_CLASSES_ROOT\Directory\shell\runas\command]
+&#64;=&quot;cmd.exe /c takeown /f \&quot;%1\&quot; /r /d y &amp; icacls \&quot;%1\&quot; /grant administrators:F /t&quot;
+&quot;IsolatedCommand&quot;=&quot;cmd.exe /c takeown /f \&quot;%1\&quot; /r /d y &amp; icacls \&quot;%1\&quot; /grant administrators:F /t&quot;
+</pre>
+<p>主题安装成功后修改**pelicanconf.py**文件，添加如下语句，重新生成(make html)即可。</p>
+<blockquote>
+THEME = '你的主题名'</blockquote>
+</div>
+
+            </div><!-- /.entry-content -->
+            <div class="comments">
+              <h3>Comments</h3>
+              <div id="disqus_thread"></div>
+              <script type="text/javascript">
+                var disqus_identifier = "pelicanzhu-ti-she-zhi.html";
+                (function() {
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = 'https://lixingke3650-githubblog.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+              </script>
+            </div>
+
+
+        </div><!-- /.eleven.columns -->
+
+<div class="three columns">
+
+
+<h4>Categories</h4>
+<ul class="blank">
+		<li><a href="/category/ri-ji.html">日记</a></li>
+		<li><a href="/category/xiang-mu.html">项目</a></li>
+		<li><a href="/category/xue-xi.html">学习</a></li>
+		<li><a href="/category/zheng-li.html">整理</a></li>
+</ul>
+
+
+<h4>Tags</h4>
+	<ul class="blank">
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/pptp.html">PPTP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69daf0b8>]"><a href="/tag/utf-8.html">UTF-8</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69ac5cf8>]"><a href="/tag/nfc.html">NFC</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d77240>]"><a href="/tag/apache.html">Apache</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f6854cf28>]"><a href="/tag/markdown.html">Markdown</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69b5d0f0>]"><a href="/tag/dropbox.html">Dropbox</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/vps.html">VPS</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69ce0198>]"><a href="/tag/zui-duan-lu-jing.html">最短路径</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d77240>]"><a href="/tag/fms.html">FMS</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c88198>, <pelican.contents.Article object at 0x2b9f69dc7da0>]"><a href="/tag/rc4.html">RC4</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c756d8>, <pelican.contents.Article object at 0x2b9f69b55fd0>]"><a href="/tag/dai-li.html">代理</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69daf0b8>]"><a href="/tag/bytesstr.html">bytes&amp;str</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69cc77b8>]"><a href="/tag/ba-huang-hou.html">八皇后</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69907dd8>]"><a href="/tag/kuai-su-pai-xu.html">快速排序</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c447b8>]"><a href="/tag/orpsf.html">OrPSF</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69daf0b8>]"><a href="/tag/zi-fu-bian-ma.html">字符编码</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f68544b70>]"><a href="/tag/ha-fu-man-bian-ma.html">哈夫曼编码</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d777f0>]"><a href="/tag/guo-min-xing-bi-yan.html">过敏性鼻炎</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d77e48>]"><a href="/tag/clexe.html">CL.exe</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/vpn.html">VPN</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f6854cf28>]"><a href="/tag/restructuredtext.html">reStructuredText</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c447b8>]"><a href="/tag/sftp.html">SFTP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69abac18>]"><a href="/tag/man-che-si-te-bian-ma.html">曼彻斯特编码</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f68563128>]"><a href="/tag/start-stop-daemon.html">start-stop-daemon</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d18e10>]"><a href="/tag/homebrew.html">Homebrew</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69abac18>]"><a href="/tag/tong-xin-yuan-li.html">通信原理</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69dc7da0>]"><a href="/tag/jia-jie-mi.html">加解密</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d18e10>]"><a href="/tag/mac.html">Mac</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c756d8>, <pelican.contents.Article object at 0x2b9f69daf0b8>, <pelican.contents.Article object at 0x2b9f69baea20>, <pelican.contents.Article object at 0x2b9f69b55fd0>, <pelican.contents.Article object at 0x2b9f69c68320>]"><a href="/tag/python.html">Python</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69a22b38>]"><a href="/tag/nginx.html">Nginx</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69b5d0f0>, <pelican.contents.Article object at 0x2b9f69b876a0>, <pelican.contents.Article object at 0x2b9f69c4fc18>]"><a href="/tag/pelican.html">Pelican</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69bf7780>, <pelican.contents.Article object at 0x2b9f69c62278>, <pelican.contents.Article object at 0x2b9f69907dd8>, <pelican.contents.Article object at 0x2b9f68544b70>, <pelican.contents.Article object at 0x2b9f69cc77b8>, <pelican.contents.Article object at 0x2b9f69ce0198>]"><a href="/tag/suan-fa.html">算法</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69a97240>, <pelican.contents.Article object at 0x2b9f69d77240>]"><a href="/tag/php.html">PHP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d76f28>]"><a href="/tag/apjp.html">APJP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69daf0b8>]"><a href="/tag/ucs.html">UCS</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d76f28>]"><a href="/tag/bae.html">BAE</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/openvpn.html">OpenVPN</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69daf160>]"><a href="/tag/you.html">YOU</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d18898>]"><a href="/tag/rtorrent.html">rTorrent</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f68563128>, <pelican.contents.Article object at 0x2b9f69cf7240>, <pelican.contents.Article object at 0x2b9f69a22b38>, <pelican.contents.Article object at 0x2b9f69dbd908>, <pelican.contents.Article object at 0x2b9f69d77240>]"><a href="/tag/linux.html">Linux</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/ipsec.html">IPSec</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69dc7da0>]"><a href="/tag/arc4.html">ARC4</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69b1a7b8>]"><a href="/tag/except.html">except</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c88198>]"><a href="/tag/tls.html">TLS</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69b5d0f0>]"><a href="/tag/blog.html">Blog</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69fe5dd8>, <pelican.contents.Article object at 0x2b9f69a97240>]"><a href="/tag/postgresql.html">PostgreSQL</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c58978>]"><a href="/tag/grub.html">GRUB</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c88198>]"><a href="/tag/ortunnel.html">OrTunnel</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c88198>]"><a href="/tag/ssl.html">SSL</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69daf0b8>]"><a href="/tag/unicode.html">Unicode</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69adbe80>]"><a href="/tag/p2p.html">P2P</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d83588>]"><a href="/tag/http.html">HTTP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69a97240>]"><a href="/tag/iis.html">IIS</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69cc77b8>, <pelican.contents.Article object at 0x2b9f69ce0198>]"><a href="/tag/hui-su.html">回溯</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69adbe80>]"><a href="/tag/nei-wang-chuan-tou.html">内网穿透</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c756d8>, <pelican.contents.Article object at 0x2b9f69b55fd0>]"><a href="/tag/orro.html">ORRO</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/l2tp.html">L2TP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69b1a7b8>]"><a href="/tag/zi-dong-jiao-hu.html">自动交互</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d77e48>]"><a href="/tag/sublime.html">Sublime</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c4fc18>]"><a href="/tag/github.html">GitHub</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69fe5dd8>]"><a href="/tag/shu-ju-ku.html">数据库</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/ppp.html">PPP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69ab5630>]"><a href="/tag/tu-cheng.html">土成</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69dbd908>]"><a href="/tag/security.html">Security</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f68563128>]"><a href="/tag/ormonitor.html">OrMonitor</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f68544b70>]"><a href="/tag/ha-fu-man-shu.html">哈夫曼树</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69adbe80>]"><a href="/tag/im.html">IM</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69cf7240>]"><a href="/tag/gunicorn.html">Gunicorn</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69a97240>]"><a href="/tag/mysql.html">MySQL</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c88198>]"><a href="/tag/tunnel.html">tunnel</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c68320>]"><a href="/tag/web.html">Web</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c9e5f8>]"><a href="/tag/liu-mei-ti.html">流媒体</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69ac5cf8>]"><a href="/tag/felica.html">Felica</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d77240>]"><a href="/tag/centos.html">CentOS</a></li>
+</ul>
+
+<nav class="widget">
+  <h4>Social</h4>
+  <ul class="blank">
+    <li><a href="http://github.com/lixingke3650">github</a></li>
+  </ul>
+</nav>
+
+</div> </div><!-- /.row -->
+
+
+</section>
+
+       </div><!-- /.row -->
+    </div><!-- /.container -->
+
+
+       <div class="container.nopad bg">
+
+    
+        <footer id="credits" class="row">
+          <div class="seven columns left-center">
+
+                   <address id="about" class="vcard body">
+                    &copy; Copyright 2016, Hanbin 
+                    <br />
+                    Proudly powered by <a href="http://getpelican.com/">Pelican</a>,
+                    which takes great advantage of <a href="http://python.org">Python</a>.
+                    <br />
+                    Based on the <a target="_blank" href="http://gumbyframework.com">Gumby Framework</a>
+                    </address>
+          </div>
+
+
+          <div class="seven columns">
+            <div class="row">
+              <ul class="socbtns">
+
+                <li><div class="btn primary"><a href="http://github.com/lixingke3650/" target="_blank">Github</a></div></li>
+
+
+
+
+              </ul>
+            </div>
+          </div>
+        </footer>
+
+    </div>
+
+
+<script type="text/javascript">
+    var disqus_shortname = 'lixingke3650-githubblog';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+  <script src="/theme/js/libs/jquery-1.9.1.min.js"></script>
+  <script src="/theme/js/libs/gumby.min.js"></script>
+  <script src="/theme/js/plugins.js"></script>
+</body>
+</html>

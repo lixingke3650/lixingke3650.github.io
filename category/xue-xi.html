@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="jp">
+<head>
+
+        <title>lixingke3650</title>
+        <meta charset="utf-8" />
+
+
+        <!-- Mobile viewport optimized: j.mp/bplateviewport -->
+        <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1">
+
+        <link rel="stylesheet" type="text/css" href="/theme/gumby.css" />
+        <link rel="stylesheet" type="text/css" href="/theme/style.css" />
+        <link rel="stylesheet" type="text/css" href="/theme/pygment.css" />
+
+        <script src="/theme/js/libs/modernizr-2.6.2.min.js"></script>
+
+
+
+
+</head>
+
+<body id="index" class="home">
+
+
+    <div class="container">
+
+        <div class="row">
+
+          <header id="banner" class="body">
+                  <h1><a href="/">lixingke3650 <strong></strong></a></h1>
+          </header><!-- /#banner -->
+
+            <div id="navigation" class="navbar row">
+              <a href="#" gumby-trigger="#navigation &gt; ul" class="toggle"><i class="icon-menu"></i></a>
+             
+              <ul class="columns">
+                <li><a href="/">Home</a></li>
+
+                  <li><a href="/category/ri-ji.html">日记</a></li>
+                  <li><a href="/category/xiang-mu.html">项目</a></li>
+                  <li class="active"><a href="/category/xue-xi.html">学习</a></li>
+                  <li><a href="/category/zheng-li.html">整理</a></li>
+
+              </ul>
+            </div>
+
+<section id="content">
+<h2>Articles in the 学习 category</h2>
+
+
+   <div class="row">
+
+
+        <div class="eleven columns">
+                 <ol id="post-list">
+                        <li><article class="hentry">
+                                <header> <h2 class="entry-title"><a href="/rc4jia-mi-suan-fa-ji-shi-xian.html" rel="bookmark" title="Permalink to RC4加密算法及实现">RC4加密算法及实现</a></h2> </header>
+                                <footer class="post-info">
+                                    <abbr class="published" title="2015-02-28T21:00:00+09:00"> Sat 28 February 2015 </abbr>
+                                    <address class="vcard author">By 
+                                    <a class="url fn" href="/author/hanbin.html"> Hanbin</a>
+                                    </address>
+                                </footer><!-- /.post-info -->
+                                <div class="entry-content"> <hr class="docutils" />
+<p>之前写的一个网络间数据安全通信工具([OrTunnel][1])用到了该算法，
+整理并记载出来，以备翻阅。</p>
+<hr class="docutils" />
+<div class="section" id="rc4">
+<h2>RC4背景</h2>
+<p>RC4是一个数据加密算法，由Ron Rivest在1987年设计。
+设计之初，该算法并未被公开。后来(1994.9)不知是有意
+还是无意的被发布到了互联网上，并由此传播开来。
+也因此ARC4算法从未被正式公开过，其名称也没有一个官方说法，
+ARC4,RC4,ARCFOUR都是常用的名字。</p>
+</div>
+<div class="section" id="id1">
+<h2>RC4特点</h2>
+<ul class="simple">
+<li>RC4的密钥是可变长度的。</li>
+<li>RC4属于对称式加密，加解密使用同一密钥。</li>
+<li>RC4是一个流加密算法，可实时实现加解密，不需要获取全部数据包。</li>
+</ul>
+<p>从应用角度来说，RC4有如下需要注意的地方。</p>
+<p>优点：</p>
+<blockquote>
+<ul class="simple">
+<li>加解密速度极快</li>
+<li>软硬件实现相当容易</li>
+<li>加密性较好</li>
+</ul>
+</blockquote>
+<p>不足：</p>
+<blockquote>
+<ul class="simple">
+<li>对称式加密，加解密使用同一密钥，使得密钥管理变得麻烦</li>
+<li>加密用内部密钥是一个伪随机序列，存在被破解的危险</li>
+</ul>
+</blockquote>
+<p>RC4被广泛使用于互联网的各个地方，如WEP协议,BitTorrent协议,Skype等。
+但由于其自身安全性问题被SSL/TLS所弃用(2015年2月被禁止)。
+当然 ...</p></div> </div><!-- /.entry-content -->
+
+                                <div class="medium primary btn"><a href="/rc4jia-mi-suan-fa-ji-shi-xian.html" rel="bookmark" title="Permalink to RC4加密算法及实现">Read more <i class="icon-arrow-right"></i></a></div>
+
+
+
+                                <div class="row tag-row">
+                                        <span>Tagged as : </span>
+                                            <a class="danger label" href="/tag/arc4.html">ARC4</a>
+                                            <a class="danger label" href="/tag/rc4.html">RC4</a>
+                                            <a class="danger label" href="/tag/jia-jie-mi.html">加解密</a>
+                                </div>
+
+
+
+                        </article></li>
+                        <li><article class="hentry">
+                                <header> <h2 class="entry-title"><a href="/zi-fu-bian-ma-de-fu-qian-li-jie.html" rel="bookmark" title="Permalink to 字符编码的肤浅理解">字符编码的肤浅理解</a></h2> </header>
+                                <footer class="post-info">
+                                    <abbr class="published" title="2015-01-07T21:00:00+09:00"> Wed 07 January 2015 </abbr>
+                                    <address class="vcard author">By 
+                                    <a class="url fn" href="/author/hanbin.html"> Hanbin</a>
+                                    </address>
+                                </footer><!-- /.post-info -->
+                                <div class="entry-content"> <hr class="docutils" />
+<div class="section" id="id1">
+<h2>起因</h2>
+<p>python写的网络通信程序，
+想从python2迁移到python3，
+发现socket的recv与send函数发生了变化。
+主要是参数(发送或接受的数据)由py2时的字符串(str)
+变为了py3的字节串(bytes,就叫它字节串吧)。
+python2极大模糊了数据类型，虽然方便了程序员快速编码，
+但也影响了程序员对数据的理解。
+可能发现了bytes数据在某些场合下有着重要作用，
+python3中增加了此数据类型。
+一个明显的应用就是网络通信。</p>
+</div>
+<hr class="docutils" />
+<div class="section" id="id2">
+<h2>由字符编码引起的问题</h2>
+<p>下面这两段代码，分别运行在
+python2，python3下，有着相同的效果。
+每次从socket中读取一个字符(可能用词不准确)，
+若该字符是汉字'止',则停止通信。
+用汉字作为结束判定符不是个好主意，
+这里仅为了发现和说明问题。</p>
+<p>在读代码之前需要了解：</p>
+<blockquote>
+<ul class="simple">
+<li>python2中socket.recv返回的是str</li>
+<li>pyhton3中socket.recv返回的是bytes</li>
+</ul>
+</blockquote>
+<div class="highlight"><pre><span></span><span class="p">[</span><span class="n">python2</span><span class="p">]</span>
+<span class="c1">#! C:\Python\Python2\python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1"># Filename: test.py</span>
+
+<span class="c1"># 送信代码</span>
+<span class="c1"># mySocket.send( msg )</span>
+
+<span class="k">while ...</span></pre></div></div> </div><!-- /.entry-content -->
+
+                                <div class="medium primary btn"><a href="/zi-fu-bian-ma-de-fu-qian-li-jie.html" rel="bookmark" title="Permalink to 字符编码的肤浅理解">Read more <i class="icon-arrow-right"></i></a></div>
+
+
+
+                                <div class="row tag-row">
+                                        <span>Tagged as : </span>
+                                            <a class="danger label" href="/tag/zi-fu-bian-ma.html">字符编码</a>
+                                            <a class="danger label" href="/tag/python.html">Python</a>
+                                            <a class="danger label" href="/tag/bytesstr.html">bytes&amp;str</a>
+                                            <a class="danger label" href="/tag/utf-8.html">UTF-8</a>
+                                            <a class="danger label" href="/tag/unicode.html">Unicode</a>
+                                            <a class="danger label" href="/tag/ucs.html">UCS</a>
+                                </div>
+
+
+
+                        </article></li>
+                        <li><article class="hentry">
+                                <header> <h2 class="entry-title"><a href="/yi-ge-pythonlei-cao-zuo-de-qi-guai-xian-xiang.html" rel="bookmark" title="Permalink to 一个Python类操作的奇怪现象">一个Python类操作的奇怪现象</a></h2> </header>
+                                <footer class="post-info">
+                                    <abbr class="published" title="2014-12-17T21:00:00+09:00"> Wed 17 December 2014 </abbr>
+                                    <address class="vcard author">By 
+                                    <a class="url fn" href="/author/hanbin.html"> Hanbin</a>
+                                    </address>
+                                </footer><!-- /.post-info -->
+                                <div class="entry-content"> <hr class="docutils" />
+<div class="section" id="id1">
+<h2>奇怪的现象</h2>
+<p>在写Http头处理工具的时候，发现如下奇怪的现象：</p>
+<p>(为方便弄清楚问题，以下为简化代码)</p>
+<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">HTTP_HEAD</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;http head&#39;&#39;&#39;</span>
+
+    <span class="n">_Headcomplete</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">headstr</span><span class="o">=</span><span class="bp">None</span> <span class="p">):</span>
+        <span class="n">Value1</span> <span class="o">=</span> <span class="n">headstr</span><span class="o">.</span><span class="n">split</span><span class="p">(</span> <span class="s1">&#39;</span><span class="se">\r\n</span><span class="s1">&#39;</span> <span class="p">)</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">Value1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_Headcomplete</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">key</span>
+
+    <span class="k">def</span> <span class="nf">getTags</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">tagname</span> <span class="o">=</span> <span class="bp">None</span> <span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span><span class="p">(</span> <span class="n">tagname</span> <span class="o">==</span> <span class="bp">None</span> <span class="p">):</span>
+                <span class="k">return</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">_Headcomplete</span> <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_Headcomplete</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">tagname</span><span class="p">,</span> <span class="bp">None</span><span class="p">))</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">return</span><span class="p">(</span> <span class="bp">None ...</span></pre></div></div> </div><!-- /.entry-content -->
+
+                                <div class="medium primary btn"><a href="/yi-ge-pythonlei-cao-zuo-de-qi-guai-xian-xiang.html" rel="bookmark" title="Permalink to 一个Python类操作的奇怪现象">Read more <i class="icon-arrow-right"></i></a></div>
+
+
+
+                                <div class="row tag-row">
+                                        <span>Tagged as : </span>
+                                            <a class="danger label" href="/tag/python.html">Python</a>
+                                </div>
+
+
+
+                        </article></li>
+                        <li><article class="hentry">
+                                <header> <h2 class="entry-title"><a href="/mai-shu-wen-ti-qiu-jie.html" rel="bookmark" title="Permalink to 买书问题求解">买书问题求解</a></h2> </header>
+                                <footer class="post-info">
+                                    <abbr class="published" title="2014-07-28T20:00:00+09:00"> Mon 28 July 2014 </abbr>
+                                    <address class="vcard author">By 
+                                    <a class="url fn" href="/author/hanbin.html"> Hanbin</a>
+                                    </address>
+                                </footer><!-- /.post-info -->
+                                <div class="entry-content"> <div class="section" id="id1">
+<h2>买书问题</h2>
+<p>某一系列图书共有5卷，每卷单独购买需要8元，若一次购买不同的两卷，则享受5%的优惠，
+三卷则更多.具体如下：</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">本数</th>
+<th class="head">折扣</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>2</td>
+<td>5%</td>
+</tr>
+<tr><td>3</td>
+<td>10%</td>
+</tr>
+<tr><td>4</td>
+<td>20%</td>
+</tr>
+<tr><td>5</td>
+<td>25%</td>
+</tr>
+</tbody>
+</table>
+<p>同样一份订单中，根据选择的折扣不同会有不同的价格总额。设计一个算法，求出最合算的购买方式及总价。</p>
+<p>例如： 购买卷一两本，卷二两本，卷三两本，卷四一本，卷五一本。</p>
+<p>若选择五卷折扣加三卷折扣总额为 <strong>5*8*0.75+3*8*0.9=51.6</strong></p>
+<p>若选择两个四卷折扣总额为 <strong>4*8*0.8*2=51.2</strong></p>
+<p>-- 来自《编程之美》</p>
+<div class="section" id="id2">
+<h3>求解思路 ...</h3></div></div> </div><!-- /.entry-content -->
+
+                                <div class="medium primary btn"><a href="/mai-shu-wen-ti-qiu-jie.html" rel="bookmark" title="Permalink to 买书问题求解">Read more <i class="icon-arrow-right"></i></a></div>
+
+
+
+                                <div class="row tag-row">
+                                        <span>Tagged as : </span>
+                                            <a class="danger label" href="/tag/suan-fa.html">算法</a>
+                                </div>
+
+
+
+                        </article></li>
+                        <li><article class="hentry">
+                                <header> <h2 class="entry-title"><a href="/luo-bing-wen-ti-qiu-jie.html" rel="bookmark" title="Permalink to 烙饼问题求解">烙饼问题求解</a></h2> </header>
+                                <footer class="post-info">
+                                    <abbr class="published" title="2014-07-26T15:00:00+09:00"> Sat 26 July 2014 </abbr>
+                                    <address class="vcard author">By 
+                                    <a class="url fn" href="/author/hanbin.html"> Hanbin</a>
+                                    </address>
+                                </footer><!-- /.post-info -->
+                                <div class="entry-content"> <div class="section" id="id1">
+<h2>烙饼问题</h2>
+<p><strong>有一堆烙饼，大小不一。只用一只手抓住最上面的几块，整体颠倒，反复几次后
+即可实现排序，小在上，大在下。</strong> -- 来自《编程之美》</p>
+<div class="section" id="id2">
+<h3>求解思路</h3>
+<p>首先找到最大尺寸的饼，将其翻转到最下面。为实现此目的，必须现将最大饼翻转到
+顶层，然后再整体颠倒。第二次翻转时，找除底层外最大的饼，并进行同样的翻转，
+数次后可实现排序。</p>
+</div>
+<div class="section" id="id3">
+<h3>代码</h3>
+<p>C代码如下，没有进行优化，时间复杂度 O(n^2).</p>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+
+<span class="cm">/******************************************/</span>
+<span class="cm">/* 思路： 每次寻找除底层外最大的饼，</span>
+<span class="cm">/* 先将其反转到最上层，然后再反转到下层正确位置</span>
+<span class="cm">/******************************************/</span>
+
+
+<span class="cm">/******************************************/</span>
+<span class="cm">/* 翻转</span>
+<span class="cm">/* @parameter</span>
+<span class="cm">/*     [in/out]arr: 待排序饼序列</span>
+<span class="cm">/*     [in    ]l: 序列中需翻转的起点</span>
+<span class="cm">/*     [in    ]r: 序列中需翻转的终点</span>
+<span class="cm">/*     [   out]counr ...</span></pre></div></div></div> </div><!-- /.entry-content -->
+
+                                <div class="medium primary btn"><a href="/luo-bing-wen-ti-qiu-jie.html" rel="bookmark" title="Permalink to 烙饼问题求解">Read more <i class="icon-arrow-right"></i></a></div>
+
+
+
+                                <div class="row tag-row">
+                                        <span>Tagged as : </span>
+                                            <a class="danger label" href="/tag/suan-fa.html">算法</a>
+                                </div>
+
+
+
+                        </article></li>
+                </ol><!-- /#posts-list -->
+
+        </div><!-- /.eleven.columns -->
+        
+<div class="three columns">
+
+
+<h4>Categories</h4>
+<ul class="blank">
+		<li><a href="/category/ri-ji.html">日记</a></li>
+		<li><a href="/category/xiang-mu.html">项目</a></li>
+		<li><a href="/category/xue-xi.html">学习</a></li>
+		<li><a href="/category/zheng-li.html">整理</a></li>
+</ul>
+
+
+<h4>Tags</h4>
+	<ul class="blank">
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/pptp.html">PPTP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69daf0b8>]"><a href="/tag/utf-8.html">UTF-8</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69ac5cf8>]"><a href="/tag/nfc.html">NFC</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d77240>]"><a href="/tag/apache.html">Apache</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f6854cf28>]"><a href="/tag/markdown.html">Markdown</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69b5d0f0>]"><a href="/tag/dropbox.html">Dropbox</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/vps.html">VPS</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69ce0198>]"><a href="/tag/zui-duan-lu-jing.html">最短路径</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d77240>]"><a href="/tag/fms.html">FMS</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c88198>, <pelican.contents.Article object at 0x2b9f69dc7da0>]"><a href="/tag/rc4.html">RC4</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c756d8>, <pelican.contents.Article object at 0x2b9f69b55fd0>]"><a href="/tag/dai-li.html">代理</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69daf0b8>]"><a href="/tag/bytesstr.html">bytes&amp;str</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69cc77b8>]"><a href="/tag/ba-huang-hou.html">八皇后</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69907dd8>]"><a href="/tag/kuai-su-pai-xu.html">快速排序</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c447b8>]"><a href="/tag/orpsf.html">OrPSF</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69daf0b8>]"><a href="/tag/zi-fu-bian-ma.html">字符编码</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f68544b70>]"><a href="/tag/ha-fu-man-bian-ma.html">哈夫曼编码</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d777f0>]"><a href="/tag/guo-min-xing-bi-yan.html">过敏性鼻炎</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d77e48>]"><a href="/tag/clexe.html">CL.exe</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/vpn.html">VPN</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f6854cf28>]"><a href="/tag/restructuredtext.html">reStructuredText</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c447b8>]"><a href="/tag/sftp.html">SFTP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69abac18>]"><a href="/tag/man-che-si-te-bian-ma.html">曼彻斯特编码</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f68563128>]"><a href="/tag/start-stop-daemon.html">start-stop-daemon</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d18e10>]"><a href="/tag/homebrew.html">Homebrew</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69abac18>]"><a href="/tag/tong-xin-yuan-li.html">通信原理</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69dc7da0>]"><a href="/tag/jia-jie-mi.html">加解密</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d18e10>]"><a href="/tag/mac.html">Mac</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c756d8>, <pelican.contents.Article object at 0x2b9f69daf0b8>, <pelican.contents.Article object at 0x2b9f69baea20>, <pelican.contents.Article object at 0x2b9f69b55fd0>, <pelican.contents.Article object at 0x2b9f69c68320>]"><a href="/tag/python.html">Python</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69a22b38>]"><a href="/tag/nginx.html">Nginx</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69b5d0f0>, <pelican.contents.Article object at 0x2b9f69b876a0>, <pelican.contents.Article object at 0x2b9f69c4fc18>]"><a href="/tag/pelican.html">Pelican</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69bf7780>, <pelican.contents.Article object at 0x2b9f69c62278>, <pelican.contents.Article object at 0x2b9f69907dd8>, <pelican.contents.Article object at 0x2b9f68544b70>, <pelican.contents.Article object at 0x2b9f69cc77b8>, <pelican.contents.Article object at 0x2b9f69ce0198>]"><a href="/tag/suan-fa.html">算法</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69a97240>, <pelican.contents.Article object at 0x2b9f69d77240>]"><a href="/tag/php.html">PHP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d76f28>]"><a href="/tag/apjp.html">APJP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69daf0b8>]"><a href="/tag/ucs.html">UCS</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d76f28>]"><a href="/tag/bae.html">BAE</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/openvpn.html">OpenVPN</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69daf160>]"><a href="/tag/you.html">YOU</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d18898>]"><a href="/tag/rtorrent.html">rTorrent</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f68563128>, <pelican.contents.Article object at 0x2b9f69cf7240>, <pelican.contents.Article object at 0x2b9f69a22b38>, <pelican.contents.Article object at 0x2b9f69dbd908>, <pelican.contents.Article object at 0x2b9f69d77240>]"><a href="/tag/linux.html">Linux</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/ipsec.html">IPSec</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69dc7da0>]"><a href="/tag/arc4.html">ARC4</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69b1a7b8>]"><a href="/tag/except.html">except</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c88198>]"><a href="/tag/tls.html">TLS</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69b5d0f0>]"><a href="/tag/blog.html">Blog</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69fe5dd8>, <pelican.contents.Article object at 0x2b9f69a97240>]"><a href="/tag/postgresql.html">PostgreSQL</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c58978>]"><a href="/tag/grub.html">GRUB</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c88198>]"><a href="/tag/ortunnel.html">OrTunnel</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c88198>]"><a href="/tag/ssl.html">SSL</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69daf0b8>]"><a href="/tag/unicode.html">Unicode</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69adbe80>]"><a href="/tag/p2p.html">P2P</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d83588>]"><a href="/tag/http.html">HTTP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69a97240>]"><a href="/tag/iis.html">IIS</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69cc77b8>, <pelican.contents.Article object at 0x2b9f69ce0198>]"><a href="/tag/hui-su.html">回溯</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69adbe80>]"><a href="/tag/nei-wang-chuan-tou.html">内网穿透</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c756d8>, <pelican.contents.Article object at 0x2b9f69b55fd0>]"><a href="/tag/orro.html">ORRO</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/l2tp.html">L2TP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69b1a7b8>]"><a href="/tag/zi-dong-jiao-hu.html">自动交互</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d77e48>]"><a href="/tag/sublime.html">Sublime</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c4fc18>]"><a href="/tag/github.html">GitHub</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69fe5dd8>]"><a href="/tag/shu-ju-ku.html">数据库</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/ppp.html">PPP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69ab5630>]"><a href="/tag/tu-cheng.html">土成</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69dbd908>]"><a href="/tag/security.html">Security</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f68563128>]"><a href="/tag/ormonitor.html">OrMonitor</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f68544b70>]"><a href="/tag/ha-fu-man-shu.html">哈夫曼树</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69adbe80>]"><a href="/tag/im.html">IM</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69cf7240>]"><a href="/tag/gunicorn.html">Gunicorn</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69a97240>]"><a href="/tag/mysql.html">MySQL</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c88198>]"><a href="/tag/tunnel.html">tunnel</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c68320>]"><a href="/tag/web.html">Web</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c9e5f8>]"><a href="/tag/liu-mei-ti.html">流媒体</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69ac5cf8>]"><a href="/tag/felica.html">Felica</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d77240>]"><a href="/tag/centos.html">CentOS</a></li>
+</ul>
+
+<nav class="widget">
+  <h4>Social</h4>
+  <ul class="blank">
+    <li><a href="http://github.com/lixingke3650">github</a></li>
+  </ul>
+</nav>
+
+</div> </div><!-- /.row -->
+
+<p class="paginator">
+    Page 1 / 2
+        <a href="/category/xue-xi2.html"><i class="icon-arrow-right"></i></a>
+</p>
+</section><!-- /#content -->
+
+       </div><!-- /.row -->
+    </div><!-- /.container -->
+
+
+       <div class="container.nopad bg">
+
+    
+        <footer id="credits" class="row">
+          <div class="seven columns left-center">
+
+                   <address id="about" class="vcard body">
+                    &copy; Copyright 2016, Hanbin 
+                    <br />
+                    Proudly powered by <a href="http://getpelican.com/">Pelican</a>,
+                    which takes great advantage of <a href="http://python.org">Python</a>.
+                    <br />
+                    Based on the <a target="_blank" href="http://gumbyframework.com">Gumby Framework</a>
+                    </address>
+          </div>
+
+
+          <div class="seven columns">
+            <div class="row">
+              <ul class="socbtns">
+
+                <li><div class="btn primary"><a href="http://github.com/lixingke3650/" target="_blank">Github</a></div></li>
+
+
+
+
+              </ul>
+            </div>
+          </div>
+        </footer>
+
+    </div>
+
+
+<script type="text/javascript">
+    var disqus_shortname = 'lixingke3650-githubblog';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+  <script src="/theme/js/libs/jquery-1.9.1.min.js"></script>
+  <script src="/theme/js/libs/gumby.min.js"></script>
+  <script src="/theme/js/plugins.js"></script>
+</body>
+</html>

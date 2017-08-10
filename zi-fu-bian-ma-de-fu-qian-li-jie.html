@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="jp">
+<head>
+
+        <title>字符编码的肤浅理解</title>
+        <meta charset="utf-8" />
+
+
+        <!-- Mobile viewport optimized: j.mp/bplateviewport -->
+        <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1">
+
+        <link rel="stylesheet" type="text/css" href="/theme/gumby.css" />
+        <link rel="stylesheet" type="text/css" href="/theme/style.css" />
+        <link rel="stylesheet" type="text/css" href="/theme/pygment.css" />
+
+        <script src="/theme/js/libs/modernizr-2.6.2.min.js"></script>
+
+
+
+
+</head>
+
+<body id="index" class="home">
+
+
+    <div class="container">
+
+        <div class="row">
+
+          <header id="banner" class="body">
+                  <h1><a href="/">lixingke3650 <strong></strong></a></h1>
+          </header><!-- /#banner -->
+
+            <div id="navigation" class="navbar row">
+              <a href="#" gumby-trigger="#navigation &gt; ul" class="toggle"><i class="icon-menu"></i></a>
+             
+              <ul class="columns">
+                <li><a href="/">Home</a></li>
+
+                  <li><a href="/category/ri-ji.html">日记</a></li>
+                  <li><a href="/category/xiang-mu.html">项目</a></li>
+                  <li class="active"><a href="/category/xue-xi.html">学习</a></li>
+                  <li><a href="/category/zheng-li.html">整理</a></li>
+
+              </ul>
+            </div>
+
+<section id="content" class="body">
+
+   <div class="row">
+        <div class="eleven columns">
+
+
+            <header>
+              <h2 class="entry-title">
+                <a href="/zi-fu-bian-ma-de-fu-qian-li-jie.html" rel="bookmark"
+                   title="Permalink to 字符编码的肤浅理解">字符编码的肤浅理解</a></h2>
+           
+            </header>
+            <footer class="post-info">
+              <abbr class="published" title="2015-01-07T21:00:00+09:00">
+                Wed 07 January 2015
+              </abbr>
+              <address class="vcard author">By 
+                <a class="url fn" href="/author/hanbin.html"> Hanbin</a>
+              </address>
+            </footer><!-- /.post-info -->
+            <div class="entry-content">
+              <hr class="docutils" />
+<div class="section" id="id1">
+<h2>起因</h2>
+<p>python写的网络通信程序，
+想从python2迁移到python3，
+发现socket的recv与send函数发生了变化。
+主要是参数(发送或接受的数据)由py2时的字符串(str)
+变为了py3的字节串(bytes,就叫它字节串吧)。
+python2极大模糊了数据类型，虽然方便了程序员快速编码，
+但也影响了程序员对数据的理解。
+可能发现了bytes数据在某些场合下有着重要作用，
+python3中增加了此数据类型。
+一个明显的应用就是网络通信。</p>
+</div>
+<hr class="docutils" />
+<div class="section" id="id2">
+<h2>由字符编码引起的问题</h2>
+<p>下面这两段代码，分别运行在
+python2，python3下，有着相同的效果。
+每次从socket中读取一个字符(可能用词不准确)，
+若该字符是汉字'止',则停止通信。
+用汉字作为结束判定符不是个好主意，
+这里仅为了发现和说明问题。</p>
+<p>在读代码之前需要了解：</p>
+<blockquote>
+<ul class="simple">
+<li>python2中socket.recv返回的是str</li>
+<li>pyhton3中socket.recv返回的是bytes</li>
+</ul>
+</blockquote>
+<div class="highlight"><pre><span></span><span class="p">[</span><span class="n">python2</span><span class="p">]</span>
+<span class="c1">#! C:\Python\Python2\python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1"># Filename: test.py</span>
+
+<span class="c1"># 送信代码</span>
+<span class="c1"># mySocket.send( msg )</span>
+
+<span class="k">while</span> <span class="bp">True</span> <span class="p">:</span>
+    <span class="k">try</span> <span class="p">:</span>
+        <span class="n">buf</span> <span class="o">=</span> <span class="n">mySocket</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span> <span class="mi">2</span> <span class="p">)</span>
+        <span class="k">if</span> <span class="n">buf</span> <span class="o">==</span> <span class="s1">&#39;止&#39;</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf8&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;cp936&#39;</span><span class="p">):</span>
+            <span class="k">print</span><span class="p">(</span> <span class="s1">&#39;exit!&#39;</span> <span class="p">)</span>
+            <span class="k">break</span>
+
+<span class="p">[</span><span class="n">python3</span><span class="p">]</span>
+<span class="c1">#! C:\Python\Python3\python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1"># Filename: test.py</span>
+
+<span class="c1"># 送信代码</span>
+<span class="c1"># mySocket.send( msg.encode( &#39;utf-8&#39; ) )</span>
+
+<span class="k">while</span> <span class="bp">True</span> <span class="p">:</span>
+    <span class="k">try</span> <span class="p">:</span>
+        <span class="n">buf</span> <span class="o">=</span> <span class="n">mySocket</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span> <span class="mi">3</span> <span class="p">)</span>
+        <span class="k">if</span> <span class="n">buf</span> <span class="o">==</span> <span class="s1">&#39;止&#39;</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf8&#39;</span><span class="p">):</span>
+            <span class="k">print</span><span class="p">(</span> <span class="s1">&#39;exit!&#39;</span> <span class="p">)</span>
+            <span class="k">break</span>
+</pre></div>
+<p>这段代码中有两处让我疑惑的地方：</p>
+<ul class="simple">
+<li>encode与decode</li>
+<li>recv的参数，即读取的size</li>
+</ul>
+</div>
+<hr class="docutils" />
+<div class="section" id="id3">
+<h2>问题的解决</h2>
+<div class="section" id="ucsunicodeutf8">
+<h3>UCS、Unicode和UTF8</h3>
+<p>UCS(Universal Coded Character Set,
+原名Universal Multiple-Octet Coded Character Set)
+是国际标准化组织(International Organization for Standardization)
+制定的标准字符集。(ISO/IEC 10646)</p>
+<p>Unicode,由统一码联盟(The Unicode Consortium)创建的，
+旨在取代现有所有的字符编码。
+Unicode标准除了字符编码外，还包括视觉上的字形，字符特性等。</p>
+<p>当两个标准僵持不下最终会阻碍业界进步，
+两个组织也认识到这一点，并做了大量的统一工作。
+从Unicode2.0开始，将采用与UCS相同的字库及编码标准(目前最新版本为7.0)，
+因此从字符编码角度来说，两者基本一致。</p>
+<p>UTF8(8-bit Unicode Transformation Format),
+是对Unicode的可变长度字符编码，是一种前缀码，
+可以用来表示Unicode中的任何字符。
+可变长度是指当表示ACS2码时只用一个字节即可，而表示较复杂字符时，
+会采用多位字节。而多位字节的字节数则由首位字节前几位给出。
+例如表示ACS2码时UTF8的二进制形式为：</p>
+<blockquote>
+** 0xxxxxxx **</blockquote>
+<p>表示汉字时(以三个字节为例)：</p>
+<blockquote>
+** 1110xxxx 10xxxxxx 10xxxxxx **</blockquote>
+<p>其中的x即字符的Unicode编码的二进制形式。</p>
+<p>说到这里，大体明白了UTF8就是对Unicode的一种再编码，
+既然已经有了Unicode，为什么还要UTF8呢。
+我觉得主要原因是:</p>
+<ul class="simple">
+<li>** 兼容现有的字符系统 **</li>
+<li>** 节省存储空间 **</li>
+</ul>
+<p>UTF8在表示ACS2时与之前的编码方式并无不同，且只需要一个字节，
+而Unicode可能需要两个字节，且与之前的编码方式不兼容(填充0)。
+也因此，当文档有大量ACS2字符时，UTF8可节省空间。
+相反如果文档大部分由复杂字符组成时，
+UTF8占用的存储空间要大于Unicode。</p>
+<p>下面是一个Unicode转换为UTF8的对应表，
+左边是字符Unicode编码的范围，
+右侧是UTF8的模版，
+x是Unicode编码的二进制形式。</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="21%" />
+<col width="79%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head" colspan="2">UCS(Unicode)编码  | UTF8 字节</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>U+00000000</td>
+<td>U+0000007F  0xxxxxxx</td>
+</tr>
+<tr><td>U+00000080</td>
+<td>U+000007FF  110xxxxx 10xxxxxx</td>
+</tr>
+<tr><td>U+00000800</td>
+<td>U+0000FFFF  1110xxxx 10xxxxxx 10xxxxxx</td>
+</tr>
+<tr><td>U+00010000</td>
+<td>U+001FFFFF  11110xxx 10xxxxxx 10xxxxxx 10xxxxxx</td>
+</tr>
+<tr><td>U+00200000</td>
+<td>U+03FFFFFF  111110xx 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx</td>
+</tr>
+<tr><td>U+04000000</td>
+<td>U+7FFFFFFF  1111110x 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="python-socket-recv-size">
+<h3>Python　socket.recv(size)</h3>
+<p>有了字符编码的知识储备，理解recv的size就容易了很多。
+前文中的例子，Python3以utf8编码传输，且socket的send，recv函数
+都是以bytes为参数，读取3byte正好为一个汉字字符。
+Python2中并没有强制要求传输bytes，代码中直接发送了str，
+(可能直接传送了Unicode编码)，
+故接受2字节恰好为一个汉字字符。</p>
+<p>简单说一下Python的encode和decode函数。</p>
+<p>Python内部是以Unicode来处理字符数据的，
+encode函数将Unicode编码的数据编码为其他指定的格式:</p>
+<div class="highlight"><pre><span></span><span class="nb">str</span> <span class="o">=</span> <span class="s1">u&#39;你好&#39;</span>
+<span class="n">str_utf</span> <span class="o">=</span> <span class="nb">str</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+</pre></div>
+<p>decode函数将某编码的数据解码为Unicode数据:</p>
+<div class="highlight"><pre><span></span><span class="nb">str</span> <span class="o">=</span> <span class="s1">u&#39;你好&#39;</span>
+<span class="n">str_utf</span> <span class="o">=</span> <span class="nb">str</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+<span class="n">str_unicode</span> <span class="o">=</span> <span class="n">str_utf</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+</pre></div>
+<p>另外，python对数据的编码与对代码文件的识别是两个不同的东西，
+不要搞混了。</p>
+</div>
+</div>
+<div class="section" id="id4">
+<h2>总结</h2>
+<p>总结就写的清楚简单一点吧。</p>
+<ul class="simple">
+<li><strong>Unicode是标准字符编码，为方便Unicode编码的保存与传输，提出了UTF8编码。</strong></li>
+<li><strong>Unicode是一种无理码，没有什么规律可言，所以保存或传送数据还是尽可能的使用UTF8吧(UTF16,UTF32)。</strong></li>
+<li><strong>Python2与Python3在网络通信中对数据的处理不同，请提前做好兼容性工作。</strong></li>
+</ul>
+<p>本文内容不多，主要参考了维基百科和各前辈们的文章。</p>
+<p>以上。</p>
+<p>20150107</p>
+<p>2015,加油！</p>
+</div>
+
+            </div><!-- /.entry-content -->
+            <div class="comments">
+              <h3>Comments</h3>
+              <div id="disqus_thread"></div>
+              <script type="text/javascript">
+                var disqus_identifier = "zi-fu-bian-ma-de-fu-qian-li-jie.html";
+                (function() {
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = 'https://lixingke3650-githubblog.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+              </script>
+            </div>
+
+
+        </div><!-- /.eleven.columns -->
+
+<div class="three columns">
+
+
+<h4>Categories</h4>
+<ul class="blank">
+		<li><a href="/category/ri-ji.html">日记</a></li>
+		<li><a href="/category/xiang-mu.html">项目</a></li>
+		<li><a href="/category/xue-xi.html">学习</a></li>
+		<li><a href="/category/zheng-li.html">整理</a></li>
+</ul>
+
+
+<h4>Tags</h4>
+	<ul class="blank">
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/pptp.html">PPTP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69daf0b8>]"><a href="/tag/utf-8.html">UTF-8</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69ac5cf8>]"><a href="/tag/nfc.html">NFC</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d77240>]"><a href="/tag/apache.html">Apache</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f6854cf28>]"><a href="/tag/markdown.html">Markdown</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69b5d0f0>]"><a href="/tag/dropbox.html">Dropbox</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/vps.html">VPS</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69ce0198>]"><a href="/tag/zui-duan-lu-jing.html">最短路径</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d77240>]"><a href="/tag/fms.html">FMS</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c88198>, <pelican.contents.Article object at 0x2b9f69dc7da0>]"><a href="/tag/rc4.html">RC4</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c756d8>, <pelican.contents.Article object at 0x2b9f69b55fd0>]"><a href="/tag/dai-li.html">代理</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69daf0b8>]"><a href="/tag/bytesstr.html">bytes&amp;str</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69cc77b8>]"><a href="/tag/ba-huang-hou.html">八皇后</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69907dd8>]"><a href="/tag/kuai-su-pai-xu.html">快速排序</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c447b8>]"><a href="/tag/orpsf.html">OrPSF</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69daf0b8>]"><a href="/tag/zi-fu-bian-ma.html">字符编码</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f68544b70>]"><a href="/tag/ha-fu-man-bian-ma.html">哈夫曼编码</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d777f0>]"><a href="/tag/guo-min-xing-bi-yan.html">过敏性鼻炎</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d77e48>]"><a href="/tag/clexe.html">CL.exe</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/vpn.html">VPN</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f6854cf28>]"><a href="/tag/restructuredtext.html">reStructuredText</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c447b8>]"><a href="/tag/sftp.html">SFTP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69abac18>]"><a href="/tag/man-che-si-te-bian-ma.html">曼彻斯特编码</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f68563128>]"><a href="/tag/start-stop-daemon.html">start-stop-daemon</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d18e10>]"><a href="/tag/homebrew.html">Homebrew</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69abac18>]"><a href="/tag/tong-xin-yuan-li.html">通信原理</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69dc7da0>]"><a href="/tag/jia-jie-mi.html">加解密</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d18e10>]"><a href="/tag/mac.html">Mac</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c756d8>, <pelican.contents.Article object at 0x2b9f69daf0b8>, <pelican.contents.Article object at 0x2b9f69baea20>, <pelican.contents.Article object at 0x2b9f69b55fd0>, <pelican.contents.Article object at 0x2b9f69c68320>]"><a href="/tag/python.html">Python</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69a22b38>]"><a href="/tag/nginx.html">Nginx</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69b5d0f0>, <pelican.contents.Article object at 0x2b9f69b876a0>, <pelican.contents.Article object at 0x2b9f69c4fc18>]"><a href="/tag/pelican.html">Pelican</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69bf7780>, <pelican.contents.Article object at 0x2b9f69c62278>, <pelican.contents.Article object at 0x2b9f69907dd8>, <pelican.contents.Article object at 0x2b9f68544b70>, <pelican.contents.Article object at 0x2b9f69cc77b8>, <pelican.contents.Article object at 0x2b9f69ce0198>]"><a href="/tag/suan-fa.html">算法</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69a97240>, <pelican.contents.Article object at 0x2b9f69d77240>]"><a href="/tag/php.html">PHP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d76f28>]"><a href="/tag/apjp.html">APJP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69daf0b8>]"><a href="/tag/ucs.html">UCS</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d76f28>]"><a href="/tag/bae.html">BAE</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/openvpn.html">OpenVPN</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69daf160>]"><a href="/tag/you.html">YOU</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d18898>]"><a href="/tag/rtorrent.html">rTorrent</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f68563128>, <pelican.contents.Article object at 0x2b9f69cf7240>, <pelican.contents.Article object at 0x2b9f69a22b38>, <pelican.contents.Article object at 0x2b9f69dbd908>, <pelican.contents.Article object at 0x2b9f69d77240>]"><a href="/tag/linux.html">Linux</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/ipsec.html">IPSec</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69dc7da0>]"><a href="/tag/arc4.html">ARC4</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69b1a7b8>]"><a href="/tag/except.html">except</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c88198>]"><a href="/tag/tls.html">TLS</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69b5d0f0>]"><a href="/tag/blog.html">Blog</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69fe5dd8>, <pelican.contents.Article object at 0x2b9f69a97240>]"><a href="/tag/postgresql.html">PostgreSQL</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c58978>]"><a href="/tag/grub.html">GRUB</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c88198>]"><a href="/tag/ortunnel.html">OrTunnel</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c88198>]"><a href="/tag/ssl.html">SSL</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69daf0b8>]"><a href="/tag/unicode.html">Unicode</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69adbe80>]"><a href="/tag/p2p.html">P2P</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d83588>]"><a href="/tag/http.html">HTTP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69a97240>]"><a href="/tag/iis.html">IIS</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69cc77b8>, <pelican.contents.Article object at 0x2b9f69ce0198>]"><a href="/tag/hui-su.html">回溯</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69adbe80>]"><a href="/tag/nei-wang-chuan-tou.html">内网穿透</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c756d8>, <pelican.contents.Article object at 0x2b9f69b55fd0>]"><a href="/tag/orro.html">ORRO</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/l2tp.html">L2TP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69b1a7b8>]"><a href="/tag/zi-dong-jiao-hu.html">自动交互</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d77e48>]"><a href="/tag/sublime.html">Sublime</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c4fc18>]"><a href="/tag/github.html">GitHub</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69fe5dd8>]"><a href="/tag/shu-ju-ku.html">数据库</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/ppp.html">PPP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69ab5630>]"><a href="/tag/tu-cheng.html">土成</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69dbd908>]"><a href="/tag/security.html">Security</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f68563128>]"><a href="/tag/ormonitor.html">OrMonitor</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f68544b70>]"><a href="/tag/ha-fu-man-shu.html">哈夫曼树</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69adbe80>]"><a href="/tag/im.html">IM</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69cf7240>]"><a href="/tag/gunicorn.html">Gunicorn</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69a97240>]"><a href="/tag/mysql.html">MySQL</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c88198>]"><a href="/tag/tunnel.html">tunnel</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c68320>]"><a href="/tag/web.html">Web</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c9e5f8>]"><a href="/tag/liu-mei-ti.html">流媒体</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69ac5cf8>]"><a href="/tag/felica.html">Felica</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d77240>]"><a href="/tag/centos.html">CentOS</a></li>
+</ul>
+
+<nav class="widget">
+  <h4>Social</h4>
+  <ul class="blank">
+    <li><a href="http://github.com/lixingke3650">github</a></li>
+  </ul>
+</nav>
+
+</div> </div><!-- /.row -->
+
+
+</section>
+
+       </div><!-- /.row -->
+    </div><!-- /.container -->
+
+
+       <div class="container.nopad bg">
+
+    
+        <footer id="credits" class="row">
+          <div class="seven columns left-center">
+
+                   <address id="about" class="vcard body">
+                    &copy; Copyright 2016, Hanbin 
+                    <br />
+                    Proudly powered by <a href="http://getpelican.com/">Pelican</a>,
+                    which takes great advantage of <a href="http://python.org">Python</a>.
+                    <br />
+                    Based on the <a target="_blank" href="http://gumbyframework.com">Gumby Framework</a>
+                    </address>
+          </div>
+
+
+          <div class="seven columns">
+            <div class="row">
+              <ul class="socbtns">
+
+                <li><div class="btn primary"><a href="http://github.com/lixingke3650/" target="_blank">Github</a></div></li>
+
+
+
+
+              </ul>
+            </div>
+          </div>
+        </footer>
+
+    </div>
+
+
+<script type="text/javascript">
+    var disqus_shortname = 'lixingke3650-githubblog';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+  <script src="/theme/js/libs/jquery-1.9.1.min.js"></script>
+  <script src="/theme/js/libs/gumby.min.js"></script>
+  <script src="/theme/js/plugins.js"></script>
+</body>
+</html>

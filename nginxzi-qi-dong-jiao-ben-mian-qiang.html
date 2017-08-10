@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="jp">
+<head>
+
+        <title>Nginx自启动脚本勉强</title>
+        <meta charset="utf-8" />
+
+
+        <!-- Mobile viewport optimized: j.mp/bplateviewport -->
+        <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1">
+
+        <link rel="stylesheet" type="text/css" href="/theme/gumby.css" />
+        <link rel="stylesheet" type="text/css" href="/theme/style.css" />
+        <link rel="stylesheet" type="text/css" href="/theme/pygment.css" />
+
+        <script src="/theme/js/libs/modernizr-2.6.2.min.js"></script>
+
+
+
+
+</head>
+
+<body id="index" class="home">
+
+
+    <div class="container">
+
+        <div class="row">
+
+          <header id="banner" class="body">
+                  <h1><a href="/">lixingke3650 <strong></strong></a></h1>
+          </header><!-- /#banner -->
+
+            <div id="navigation" class="navbar row">
+              <a href="#" gumby-trigger="#navigation &gt; ul" class="toggle"><i class="icon-menu"></i></a>
+             
+              <ul class="columns">
+                <li><a href="/">Home</a></li>
+
+                  <li><a href="/category/ri-ji.html">日记</a></li>
+                  <li><a href="/category/xiang-mu.html">项目</a></li>
+                  <li><a href="/category/xue-xi.html">学习</a></li>
+                  <li class="active"><a href="/category/zheng-li.html">整理</a></li>
+
+              </ul>
+            </div>
+
+<section id="content" class="body">
+
+   <div class="row">
+        <div class="eleven columns">
+
+
+            <header>
+              <h2 class="entry-title">
+                <a href="/nginxzi-qi-dong-jiao-ben-mian-qiang.html" rel="bookmark"
+                   title="Permalink to Nginx自启动脚本勉强">Nginx自启动脚本勉强</a></h2>
+           
+            </header>
+            <footer class="post-info">
+              <abbr class="published" title="2014-09-26T20:00:00+09:00">
+                Fri 26 September 2014
+              </abbr>
+              <address class="vcard author">By 
+                <a class="url fn" href="/author/hanbin.html"> Hanbin</a>
+              </address>
+            </footer><!-- /.post-info -->
+            <div class="entry-content">
+              <p>公司每月总有那么一天要开会，学些人际交往，企业管理方面的知识，
+感觉是很高大上，但实际上空洞的很。去了就是睡觉扯淡。
+日本人习惯称它为勉強会，确实是勉强啊。
+勉强勉强再勉强...</p>
+<hr class="docutils" />
+<div class="section" id="linux">
+<h2>Linux下自启动服务</h2>
+<p>关于linux对各服务启动，我理解的肤浅的过程是：</p>
+<p>&gt; 首先查看启动级别，存放于 /etc/inittab
+&gt; 根据启动级别查找相应的rc*.d文件夹
+&gt; 按照rc*.d文件夹内的脚本编号顺序依次调用(K为停止，S为启动，越小优先级越高)
+&gt; rc*.d内的脚本通常软连接至init.d，也就是说init.d内的脚本才是最终启动服务的脚本
+&gt; Debian提供service的命令来对init.d内的脚本进行操作，也可以直接使用/etc/init.d/nginx start形式的命令来操作</p>
+<p>如上所述，Nginx自启动就是要写一个服务脚本放到/etc/init.d里面，
+再软连接至rc*.d下即可实现自启动。(可借助update-rc.d来完成)
+下面是服务脚本需要的知识以及自己写的Nginx服务脚本。</p>
+</div>
+<hr class="docutils" />
+<div class="section" id="daemons">
+<h2>daemons</h2>
+<p>这里说的daemons是一种程序启动方式，就是以后台服务的形式来启动程序。
+账户注销后服务仍然运行。</p>
+</div>
+<div class="section" id="etc-default">
+<h2>/etc/default目录</h2>
+<p>存放各种service的默认参数。
+以服务脚本自启动程序时，常从此目录读取配置。</p>
+</div>
+<div class="section" id="start-stop-daemon">
+<h2>start-stop-daemon</h2>
+<p>守护进程的启动停止等。
+刚开始还觉得 service xxx start 和 start-stop-daemon -S xxx
+没啥区别，大部分结果确实一样，但实际上
+service service xxx start 调用了init.d中的服务脚本，
+而服务脚本大多都通过start-stop-daemon来启动进程。
+第二个疑问，利用start-stop-daemon启动进程和直接运行进程有什么区别呢？
+目前查到的对我来说最大的作用就是start-stop-daemon在启动进程后可以将pid写入到
+指定文件中(通常在/var/run/ 下)，以方便后续跟踪管理。
+也就是 <strong>&quot;-m&quot;</strong> 参数，它配合 <strong>&quot;-p&quot;</strong> 参数(检查pid文件)来实现。</p>
+<p>注： 如果程序没有在指定位置生成pid文件则代为生成，若程序自己已创建pid文件则不再另行创建</p>
+</div>
+<hr class="docutils" />
+<div class="section" id="id1">
+<h2>20141008追加：</h2>
+<p>以nginx为例，启动后会有两个进程，其中一个类似于守护进程，只有结束掉
+这个守护进程，nginx才会退出，否则nginx会自动重启另一个被结束掉的进程。
+而start-stop-daemon自动生成的pid文件中记录的是另一个(非守护进程)进程的
+pid，所以在调用service nginx stop后并没有退出nginx。
+这种情况下，用start-stop-daemon自动生成的pid文件的方法就失败了。
+好在nginx自己生成pid文件，配置的时候，请将-p参数后面的路径设为与
+nginx自身生成的pid文件相同。</p>
+</div>
+<hr class="docutils" />
+<div class="section" id="lib-lsb-init-functions">
+<h2>/lib/lsb/init-functions</h2>
+<p>定义了一些启动辅助函数，简单看了下，
+包括启动进程，结束进程，获取进程pid，获取进程状态，输出log等功能。</p>
+</div>
+<div class="section" id="update-rc-d">
+<h2>update-rc.d</h2>
+<p>系统启动管理工具，利用该工具可以将要启动的程序加入启动列表中。
+&gt; 例： update-rc.d nginx start 20 2 . stop 80 0 1 3 4 5 6
+&gt;     update-rc.d -f nginx remove</p>
+<p>启动级别2，启动顺序20，013456级别不启动，停止顺序为80</p>
+</div>
+<hr class="docutils" />
+<div class="section" id="nginx">
+<h2>Nginx服务脚本</h2>
+<p>将下面脚本中DAEMON和NGINXPID修改成符合自己环境的值以后，
+保存为/etc/init.d/nginx文件。</p>
+<p>再执行
+&gt; update-rc.d nginx start 20 2 . stop 80 0 1 3 4 5 6</p>
+<p>连接到启动文件夹下即可。
+(此处默认启动级别为 2，启动顺序为 20)</p>
+<div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
+
+<span class="c1">### BEGIN INIT INFO</span>
+<span class="c1"># Provides:          nginx</span>
+<span class="c1"># Required-Start:    $network $local_fs $remote_fs</span>
+<span class="c1"># Required-Stop:     $network $local_fs $remote_fs</span>
+<span class="c1"># Default-Start:     2</span>
+<span class="c1"># Default-Stop:      0 1 3 4 5 6</span>
+<span class="c1"># Should-Start:      slapd cups</span>
+<span class="c1"># Should-Stop:       slapd cups</span>
+<span class="c1"># Short-Description: start nginx daemons</span>
+<span class="c1"># Description:       starts nginx using start-stop-daemon</span>
+<span class="c1">### END INIT INFO</span>
+
+<span class="c1"># PATH=/sbin:/usr/local/nginx:/usr/local/nginx/sbin</span>
+<span class="nv">DAEMON</span><span class="o">=</span>/usr/local/nginx/sbin/nginx
+<span class="nv">NAME</span><span class="o">=</span>nginx
+<span class="nv">DESC</span><span class="o">=</span>nginx
+<span class="nv">NGINXPID</span><span class="o">=</span>/usr/local/nginx/logs/nginx.pid
+<span class="c1"># Include nginx defaults if available</span>
+<span class="k">if</span> <span class="o">[</span> -f /etc/default/nginx <span class="o">]</span> <span class="p">;</span> <span class="k">then</span>
+        . /etc/default/nginx
+<span class="k">fi</span>
+<span class="c1"># See if the daemons are there</span>
+<span class="nb">test</span> -x <span class="nv">$DAEMON</span> <span class="o">||</span> <span class="nb">exit</span> 0
+. /lib/lsb/init-functions
+<span class="nb">set</span> -e
+<span class="k">case</span> <span class="s2">&quot;</span><span class="nv">$1</span><span class="s2">&quot;</span> in
+    start<span class="o">)</span>
+        log_daemon_msg <span class="s2">&quot;Starting </span><span class="nv">$DESC</span><span class="s2">&quot;</span> <span class="s2">&quot;</span><span class="nv">$DAEMON</span><span class="s2">&quot;</span>
+        <span class="k">if</span> ! start-stop-daemon --start --quiet --pidfile <span class="nv">$NGINXPID</span> --exec <span class="nv">$DAEMON</span> -- <span class="nv">$DAEMON_OPTS</span><span class="p">;</span> <span class="k">then</span>
+            log_end_msg 1
+            <span class="nb">exit</span> 1
+        <span class="k">fi</span>
+        log_end_msg 0
+        <span class="p">;;</span>
+    stop<span class="o">)</span>
+        log_daemon_msg <span class="s2">&quot;Stopping </span><span class="nv">$DESC</span><span class="s2">&quot;</span> <span class="s2">&quot;</span><span class="nv">$DAEMON</span><span class="s2">&quot;</span>
+        <span class="k">if</span> ! start-stop-daemon --stop --quiet --pidfile <span class="nv">$NGINXPID</span> --exec <span class="nv">$DAEMON</span><span class="p">;</span> <span class="k">then</span>
+            log_end_msg 1
+            <span class="nb">exit</span> 1
+        <span class="k">fi</span>
+        log_end_msg 0
+        <span class="p">;;</span>
+    restart<span class="p">|</span>force-reload<span class="o">)</span>
+        log_daemon_msg <span class="s2">&quot;Restarting </span><span class="nv">$DESC</span><span class="s2">&quot;</span> <span class="s2">&quot;</span><span class="nv">$DAEMON</span><span class="s2">&quot;</span>
+        <span class="k">if</span> ! start-stop-daemon --stop --quiet --pidfile <span class="nv">$NGINXPID</span> --exec <span class="nv">$DAEMON</span><span class="p">;</span> <span class="k">then</span>
+            log_end_msg 1
+            <span class="nb">exit</span> 1
+        <span class="k">fi</span>
+        sleep 1
+        <span class="k">if</span> ! start-stop-daemon --start --quiet --pidfile <span class="nv">$NGINXPID</span> --exec <span class="nv">$DAEMON</span> -- <span class="nv">$DAEMON_OPTS</span><span class="p">;</span> <span class="k">then</span>
+            log_end_msg 1
+            <span class="nb">exit</span> 1
+        <span class="k">fi</span>
+        log_end_msg 0
+        <span class="p">;;</span>
+    reload<span class="o">)</span>
+        log_daemon_msg <span class="s2">&quot;Reloading </span><span class="nv">$DESC</span><span class="s2"> configuration&quot;</span> <span class="s2">&quot;</span><span class="nv">$DAEMON</span><span class="s2">&quot;</span>
+        <span class="k">if</span> ! start-stop-daemon --stop --signal HUP --quiet --pidfile <span class="nv">$NGINXPID</span> --exec <span class="nv">$DAEMON</span><span class="p">;</span> <span class="k">then</span>
+            log_end_msg 1
+            <span class="nb">exit</span> 1
+        <span class="k">fi</span>
+        log_end_msg 0
+        <span class="p">;;</span>
+    *<span class="o">)</span>
+        <span class="nb">echo</span> <span class="s2">&quot;Usage: </span><span class="nv">$N</span><span class="s2"> {start|stop|restart|force-reload}&quot;</span> &gt;<span class="p">&amp;</span>2
+        <span class="nb">exit</span> 1
+        <span class="p">;;</span>
+<span class="k">esac</span>
+<span class="nb">exit</span> 0
+</pre></div>
+<p>以上脚本及设置在Debian7.3+Nginx1.6.0下测试通过</p>
+<p>20140926</p>
+<p>以上。</p>
+<p>你给我再多再好的东西也提不起我丝毫的兴趣，我只要你。</p>
+</div>
+
+            </div><!-- /.entry-content -->
+            <div class="comments">
+              <h3>Comments</h3>
+              <div id="disqus_thread"></div>
+              <script type="text/javascript">
+                var disqus_identifier = "nginxzi-qi-dong-jiao-ben-mian-qiang.html";
+                (function() {
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = 'https://lixingke3650-githubblog.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+              </script>
+            </div>
+
+
+        </div><!-- /.eleven.columns -->
+
+<div class="three columns">
+
+
+<h4>Categories</h4>
+<ul class="blank">
+		<li><a href="/category/ri-ji.html">日记</a></li>
+		<li><a href="/category/xiang-mu.html">项目</a></li>
+		<li><a href="/category/xue-xi.html">学习</a></li>
+		<li><a href="/category/zheng-li.html">整理</a></li>
+</ul>
+
+
+<h4>Tags</h4>
+	<ul class="blank">
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/pptp.html">PPTP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69daf0b8>]"><a href="/tag/utf-8.html">UTF-8</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69ac5cf8>]"><a href="/tag/nfc.html">NFC</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d77240>]"><a href="/tag/apache.html">Apache</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f6854cf28>]"><a href="/tag/markdown.html">Markdown</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69b5d0f0>]"><a href="/tag/dropbox.html">Dropbox</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/vps.html">VPS</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69ce0198>]"><a href="/tag/zui-duan-lu-jing.html">最短路径</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d77240>]"><a href="/tag/fms.html">FMS</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c88198>, <pelican.contents.Article object at 0x2b9f69dc7da0>]"><a href="/tag/rc4.html">RC4</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c756d8>, <pelican.contents.Article object at 0x2b9f69b55fd0>]"><a href="/tag/dai-li.html">代理</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69daf0b8>]"><a href="/tag/bytesstr.html">bytes&amp;str</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69cc77b8>]"><a href="/tag/ba-huang-hou.html">八皇后</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69907dd8>]"><a href="/tag/kuai-su-pai-xu.html">快速排序</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c447b8>]"><a href="/tag/orpsf.html">OrPSF</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69daf0b8>]"><a href="/tag/zi-fu-bian-ma.html">字符编码</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f68544b70>]"><a href="/tag/ha-fu-man-bian-ma.html">哈夫曼编码</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d777f0>]"><a href="/tag/guo-min-xing-bi-yan.html">过敏性鼻炎</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d77e48>]"><a href="/tag/clexe.html">CL.exe</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/vpn.html">VPN</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f6854cf28>]"><a href="/tag/restructuredtext.html">reStructuredText</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c447b8>]"><a href="/tag/sftp.html">SFTP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69abac18>]"><a href="/tag/man-che-si-te-bian-ma.html">曼彻斯特编码</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f68563128>]"><a href="/tag/start-stop-daemon.html">start-stop-daemon</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d18e10>]"><a href="/tag/homebrew.html">Homebrew</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69abac18>]"><a href="/tag/tong-xin-yuan-li.html">通信原理</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69dc7da0>]"><a href="/tag/jia-jie-mi.html">加解密</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d18e10>]"><a href="/tag/mac.html">Mac</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c756d8>, <pelican.contents.Article object at 0x2b9f69daf0b8>, <pelican.contents.Article object at 0x2b9f69baea20>, <pelican.contents.Article object at 0x2b9f69b55fd0>, <pelican.contents.Article object at 0x2b9f69c68320>]"><a href="/tag/python.html">Python</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69a22b38>]"><a href="/tag/nginx.html">Nginx</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69b5d0f0>, <pelican.contents.Article object at 0x2b9f69b876a0>, <pelican.contents.Article object at 0x2b9f69c4fc18>]"><a href="/tag/pelican.html">Pelican</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69bf7780>, <pelican.contents.Article object at 0x2b9f69c62278>, <pelican.contents.Article object at 0x2b9f69907dd8>, <pelican.contents.Article object at 0x2b9f68544b70>, <pelican.contents.Article object at 0x2b9f69cc77b8>, <pelican.contents.Article object at 0x2b9f69ce0198>]"><a href="/tag/suan-fa.html">算法</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69a97240>, <pelican.contents.Article object at 0x2b9f69d77240>]"><a href="/tag/php.html">PHP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d76f28>]"><a href="/tag/apjp.html">APJP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69daf0b8>]"><a href="/tag/ucs.html">UCS</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d76f28>]"><a href="/tag/bae.html">BAE</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/openvpn.html">OpenVPN</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69daf160>]"><a href="/tag/you.html">YOU</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d18898>]"><a href="/tag/rtorrent.html">rTorrent</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f68563128>, <pelican.contents.Article object at 0x2b9f69cf7240>, <pelican.contents.Article object at 0x2b9f69a22b38>, <pelican.contents.Article object at 0x2b9f69dbd908>, <pelican.contents.Article object at 0x2b9f69d77240>]"><a href="/tag/linux.html">Linux</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/ipsec.html">IPSec</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69dc7da0>]"><a href="/tag/arc4.html">ARC4</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69b1a7b8>]"><a href="/tag/except.html">except</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c88198>]"><a href="/tag/tls.html">TLS</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69b5d0f0>]"><a href="/tag/blog.html">Blog</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69fe5dd8>, <pelican.contents.Article object at 0x2b9f69a97240>]"><a href="/tag/postgresql.html">PostgreSQL</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c58978>]"><a href="/tag/grub.html">GRUB</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c88198>]"><a href="/tag/ortunnel.html">OrTunnel</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c88198>]"><a href="/tag/ssl.html">SSL</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69daf0b8>]"><a href="/tag/unicode.html">Unicode</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69adbe80>]"><a href="/tag/p2p.html">P2P</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d83588>]"><a href="/tag/http.html">HTTP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69a97240>]"><a href="/tag/iis.html">IIS</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69cc77b8>, <pelican.contents.Article object at 0x2b9f69ce0198>]"><a href="/tag/hui-su.html">回溯</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69adbe80>]"><a href="/tag/nei-wang-chuan-tou.html">内网穿透</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c756d8>, <pelican.contents.Article object at 0x2b9f69b55fd0>]"><a href="/tag/orro.html">ORRO</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/l2tp.html">L2TP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69b1a7b8>]"><a href="/tag/zi-dong-jiao-hu.html">自动交互</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d77e48>]"><a href="/tag/sublime.html">Sublime</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c4fc18>]"><a href="/tag/github.html">GitHub</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69fe5dd8>]"><a href="/tag/shu-ju-ku.html">数据库</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/ppp.html">PPP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69ab5630>]"><a href="/tag/tu-cheng.html">土成</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69dbd908>]"><a href="/tag/security.html">Security</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f68563128>]"><a href="/tag/ormonitor.html">OrMonitor</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f68544b70>]"><a href="/tag/ha-fu-man-shu.html">哈夫曼树</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69adbe80>]"><a href="/tag/im.html">IM</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69cf7240>]"><a href="/tag/gunicorn.html">Gunicorn</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69a97240>]"><a href="/tag/mysql.html">MySQL</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c88198>]"><a href="/tag/tunnel.html">tunnel</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c68320>]"><a href="/tag/web.html">Web</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c9e5f8>]"><a href="/tag/liu-mei-ti.html">流媒体</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69ac5cf8>]"><a href="/tag/felica.html">Felica</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d77240>]"><a href="/tag/centos.html">CentOS</a></li>
+</ul>
+
+<nav class="widget">
+  <h4>Social</h4>
+  <ul class="blank">
+    <li><a href="http://github.com/lixingke3650">github</a></li>
+  </ul>
+</nav>
+
+</div> </div><!-- /.row -->
+
+
+</section>
+
+       </div><!-- /.row -->
+    </div><!-- /.container -->
+
+
+       <div class="container.nopad bg">
+
+    
+        <footer id="credits" class="row">
+          <div class="seven columns left-center">
+
+                   <address id="about" class="vcard body">
+                    &copy; Copyright 2016, Hanbin 
+                    <br />
+                    Proudly powered by <a href="http://getpelican.com/">Pelican</a>,
+                    which takes great advantage of <a href="http://python.org">Python</a>.
+                    <br />
+                    Based on the <a target="_blank" href="http://gumbyframework.com">Gumby Framework</a>
+                    </address>
+          </div>
+
+
+          <div class="seven columns">
+            <div class="row">
+              <ul class="socbtns">
+
+                <li><div class="btn primary"><a href="http://github.com/lixingke3650/" target="_blank">Github</a></div></li>
+
+
+
+
+              </ul>
+            </div>
+          </div>
+        </footer>
+
+    </div>
+
+
+<script type="text/javascript">
+    var disqus_shortname = 'lixingke3650-githubblog';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+  <script src="/theme/js/libs/jquery-1.9.1.min.js"></script>
+  <script src="/theme/js/libs/gumby.min.js"></script>
+  <script src="/theme/js/plugins.js"></script>
+</body>
+</html>

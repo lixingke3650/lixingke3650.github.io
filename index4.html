@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="jp">
+<head>
+
+        <title>lixingke3650</title>
+        <meta charset="utf-8" />
+
+
+        <!-- Mobile viewport optimized: j.mp/bplateviewport -->
+        <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1">
+
+        <link rel="stylesheet" type="text/css" href="/theme/gumby.css" />
+        <link rel="stylesheet" type="text/css" href="/theme/style.css" />
+        <link rel="stylesheet" type="text/css" href="/theme/pygment.css" />
+
+        <script src="/theme/js/libs/modernizr-2.6.2.min.js"></script>
+
+
+
+
+</head>
+
+<body id="index" class="home">
+
+
+    <div class="container">
+
+        <div class="row">
+
+          <header id="banner" class="body">
+                  <h1><a href="/">lixingke3650 <strong></strong></a></h1>
+          </header><!-- /#banner -->
+
+            <div id="navigation" class="navbar row">
+              <a href="#" gumby-trigger="#navigation &gt; ul" class="toggle"><i class="icon-menu"></i></a>
+             
+              <ul class="columns">
+                <li><a href="/">Home</a></li>
+
+                  <li><a href="/category/ri-ji.html">日记</a></li>
+                  <li><a href="/category/xiang-mu.html">项目</a></li>
+                  <li><a href="/category/xue-xi.html">学习</a></li>
+                  <li><a href="/category/zheng-li.html">整理</a></li>
+
+              </ul>
+            </div>
+
+<section id="content">
+
+
+
+   <div class="row">
+
+
+        <div class="eleven columns">
+                 <ol id="post-list">
+                        <li><article class="hentry">
+                                <header> <h2 class="entry-title"><a href="/yi-ge-pythonlei-cao-zuo-de-qi-guai-xian-xiang.html" rel="bookmark" title="Permalink to 一个Python类操作的奇怪现象">一个Python类操作的奇怪现象</a></h2> </header>
+                                <footer class="post-info">
+                                    <abbr class="published" title="2014-12-17T21:00:00+09:00"> Wed 17 December 2014 </abbr>
+                                    <address class="vcard author">By 
+                                    <a class="url fn" href="/author/hanbin.html"> Hanbin</a>
+                                    </address>
+                                </footer><!-- /.post-info -->
+                                <div class="entry-content"> <hr class="docutils" />
+<div class="section" id="id1">
+<h2>奇怪的现象</h2>
+<p>在写Http头处理工具的时候，发现如下奇怪的现象：</p>
+<p>(为方便弄清楚问题，以下为简化代码)</p>
+<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">HTTP_HEAD</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;http head&#39;&#39;&#39;</span>
+
+    <span class="n">_Headcomplete</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">headstr</span><span class="o">=</span><span class="bp">None</span> <span class="p">):</span>
+        <span class="n">Value1</span> <span class="o">=</span> <span class="n">headstr</span><span class="o">.</span><span class="n">split</span><span class="p">(</span> <span class="s1">&#39;</span><span class="se">\r\n</span><span class="s1">&#39;</span> <span class="p">)</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">Value1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_Headcomplete</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">key</span>
+
+    <span class="k">def</span> <span class="nf">getTags</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">tagname</span> <span class="o">=</span> <span class="bp">None</span> <span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span><span class="p">(</span> <span class="n">tagname</span> <span class="o">==</span> <span class="bp">None</span> <span class="p">):</span>
+                <span class="k">return</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">_Headcomplete</span> <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_Headcomplete</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">tagname</span><span class="p">,</span> <span class="bp">None</span><span class="p">))</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">return</span><span class="p">(</span> <span class="bp">None ...</span></pre></div></div> </div><!-- /.entry-content -->
+
+                                <div class="medium primary btn"><a href="/yi-ge-pythonlei-cao-zuo-de-qi-guai-xian-xiang.html" rel="bookmark" title="Permalink to 一个Python类操作的奇怪现象">Read more <i class="icon-arrow-right"></i></a></div>
+
+
+
+                                <div class="row tag-row">
+                                        <span>Tagged as : </span>
+                                            <a class="danger label" href="/tag/python.html">Python</a>
+                                </div>
+
+
+
+                        </article></li>
+                        <li><article class="hentry">
+                                <header> <h2 class="entry-title"><a href="/xue-xi-xie-ge-dai-li-gong-ju-orro-1.html" rel="bookmark" title="Permalink to 学习写个代理工具-ORRO (1)">学习写个代理工具-ORRO (1)</a></h2> </header>
+                                <footer class="post-info">
+                                    <abbr class="published" title="2014-12-16T21:00:00+09:00"> Tue 16 December 2014 </abbr>
+                                    <address class="vcard author">By 
+                                    <a class="url fn" href="/author/hanbin.html"> Hanbin</a>
+                                    </address>
+                                </footer><!-- /.post-info -->
+                                <div class="entry-content"> <hr class="docutils" />
+<p>** 项目托管在https://github.com/lixingke3650/ORRO **</p>
+<p>包含以下几篇文章
+&gt; 学习写个代理工具-ORRO (1)　　－　起因，构成
+&gt; 学习写个代理工具-ORRO (2)　　－　学习到的HTTP头知识
+&gt; 学习写个代理工具-ORRO (3)　　－　部署</p>
+<hr class="docutils" />
+<div class="section" id="id1">
+<h2>代理</h2>
+<p>在网络加速，科学上网等时候经常会碰到代理这个词，
+代理就是好像是一个中转站，如果从大连没有直飞到
+日本的飞机，或者航班数较少，那么可以借由北京中转一下。</p>
+<p>网络上的代理也是一样，从你个人的节点无法到达要访问的
+节点，或你们之间直连的速度较慢时，就可借助另外一个
+中转节点来实现互通。</p>
+<p>代理的思想很易懂，但具体到场合，工具，用途等，会
+出现很多种实现方法。</p>
+<p>最近自己以科学上网为目标学习写一个代理工具，将过程和用到的
+知识记录如下。</p>
+</div>
+<hr class="docutils" />
+<div class="section" id="orro">
+<h2>ORRO</h2>
+<p>ORRO，我给起的名字，目标是成为一个Http代理工具。
+实现方法和Goagent大致相同，以云引擎为中转。</p>
+<p>云引擎支持的语言不算多，常见的Java，Python，Ruby这几种。
+选Python吧 ...</p></div> </div><!-- /.entry-content -->
+
+                                <div class="medium primary btn"><a href="/xue-xi-xie-ge-dai-li-gong-ju-orro-1.html" rel="bookmark" title="Permalink to 学习写个代理工具-ORRO (1)">Read more <i class="icon-arrow-right"></i></a></div>
+
+
+
+                                <div class="row tag-row">
+                                        <span>Tagged as : </span>
+                                            <a class="danger label" href="/tag/orro.html">ORRO</a>
+                                            <a class="danger label" href="/tag/dai-li.html">代理</a>
+                                            <a class="danger label" href="/tag/python.html">Python</a>
+                                </div>
+
+
+
+                        </article></li>
+                        <li><article class="hentry">
+                                <header> <h2 class="entry-title"><a href="/macruan-jian-bao-guan-li-gong-ju-homebrew.html" rel="bookmark" title="Permalink to Mac软件包管理工具-Homebrew">Mac软件包管理工具-Homebrew</a></h2> </header>
+                                <footer class="post-info">
+                                    <abbr class="published" title="2014-12-11T21:00:00+09:00"> Thu 11 December 2014 </abbr>
+                                    <address class="vcard author">By 
+                                    <a class="url fn" href="/author/hanbin.html"> Hanbin</a>
+                                    </address>
+                                </footer><!-- /.post-info -->
+                                <div class="entry-content"> <hr class="docutils" />
+<p>mac买了好久，光用来看视频了，最近想用来做点东西什么的，
+竟然发现没有wget工具，安装一下吧。
+(有更为强大的curl工具，但貌似不能完全取代wget，比如递归?)</p>
+<p>自己下载编译麻烦费时，应该会有类似apt，yum的工具吧。
+查了下，常用的有MacPorts，Fink，homebrew等。</p>
+<dl class="docutils">
+<dt>看了介绍，MacPorts会额外安装依赖包，不使用系统自身的资源。</dt>
+<dd><a class="reference external" href="https://www.macports.org/">https://www.macports.org/</a></dd>
+<dt>Fink好像用的人不多，可能因为维护不及时。</dt>
+<dd><a class="reference external" href="http://www.finkproject.org/">http://www.finkproject.org/</a></dd>
+<dt>Homebrew有很多人推荐，尝试一下吧。</dt>
+<dd><a class="reference external" href="http://brew.sh/">http://brew.sh/</a></dd>
+</dl>
+<p>当然这些都是支持二进制安装的，不然太慢啦。</p>
+<hr class="docutils" />
+<p>Homebrew的安装很简单，根据主页介绍，一条ruby语句就行。</p>
+<dl class="docutils">
+<dt>安装完成后</dt>
+<dd>使用“brew　search”命令来查看收录的应用。
+使用“brew　install　xxxx”命令来安装应用。
+使用“brew ...</dd></dl> </div><!-- /.entry-content -->
+
+                                <div class="medium primary btn"><a href="/macruan-jian-bao-guan-li-gong-ju-homebrew.html" rel="bookmark" title="Permalink to Mac软件包管理工具-Homebrew">Read more <i class="icon-arrow-right"></i></a></div>
+
+
+
+                                <div class="row tag-row">
+                                        <span>Tagged as : </span>
+                                            <a class="danger label" href="/tag/mac.html">Mac</a>
+                                            <a class="danger label" href="/tag/homebrew.html">Homebrew</a>
+                                </div>
+
+
+
+                        </article></li>
+                        <li><article class="hentry">
+                                <header> <h2 class="entry-title"><a href="/linuxxia-cheng-xu-shou-hu-ormonitor.html" rel="bookmark" title="Permalink to Linux下程序守护-OrMonitor">Linux下程序守护-OrMonitor</a></h2> </header>
+                                <footer class="post-info">
+                                    <abbr class="published" title="2014-10-15T21:00:00+09:00"> Wed 15 October 2014 </abbr>
+                                    <address class="vcard author">By 
+                                    <a class="url fn" href="/author/hanbin.html"> Hanbin</a>
+                                    </address>
+                                </footer><!-- /.post-info -->
+                                <div class="entry-content"> <hr class="docutils" />
+<div class="section" id="id1">
+<h2>起因</h2>
+<p>之前学习Gunicorn时突然想到，如果Gunicorn运行过程中出现错误，自行退出，
+而管理员又不能及时发现，这就严重影响体验了。还好Gunicorn官网推荐了
+管理工具，比如Gaffer和Supervisor。</p>
+<p>不仅是gunicorn，工作中也遇到过项目进程出错退出的情况，所以还是自己尝试
+写一个工具，方便灵活还可以顺便学习。</p>
+</div>
+<hr class="docutils" />
+<div class="section" id="ormonitor">
+<h2>OrMonitor</h2>
+<p>这个工具可用来监视指定程序是否运行中，若程序未运行，则重启程序。</p>
+</div>
+<div class="section" id="id2">
+<h2>前提</h2>
+<p>&gt; 利用**start-stop-daemon**命令来重启程序，故系统要安装上start-stop-daemon工具
+&gt; 监控对象需要生成pid文件，若不能生成，推荐使用start-stop-daemon来启动程序
+&gt; (使用**-pidfile**和**-m**参数，自动生成pid文件)或者由OrMonitor来启动程序</p>
+</div>
+<div class="section" id="id3">
+<h2>程序存在否判断方法</h2>
+<p>&gt; 首先判断监控对象的pid文件是否存在，不存在则认为程序未启动
+&gt; 若pid文件存在则读取内容，判断读取到的pid号的进程是否存在,不存在则认为程序未启动
+&gt; 上述作业定期启动，若发现进程未运行，则启动程序</p>
+<p>注：监控对象需要生成pid文件，若不能自行生成则由start-stop-daemon代为生成</p>
+</div>
+<div class="section" id="id4">
+<h2>运行流程</h2>
+<p>&gt; 1.读取配置文件并计算监控周期(去各监控对象周期的最小公约数)
+&gt; 2 ...</p></div> </div><!-- /.entry-content -->
+
+                                <div class="medium primary btn"><a href="/linuxxia-cheng-xu-shou-hu-ormonitor.html" rel="bookmark" title="Permalink to Linux下程序守护-OrMonitor">Read more <i class="icon-arrow-right"></i></a></div>
+
+
+
+                                <div class="row tag-row">
+                                        <span>Tagged as : </span>
+                                            <a class="danger label" href="/tag/linux.html">Linux</a>
+                                            <a class="danger label" href="/tag/ormonitor.html">OrMonitor</a>
+                                            <a class="danger label" href="/tag/start-stop-daemon.html">start-stop-daemon</a>
+                                </div>
+
+
+
+                        </article></li>
+                        <li><article class="hentry">
+                                <header> <h2 class="entry-title"><a href="/gunicornpei-zhi-yu-yun-xing.html" rel="bookmark" title="Permalink to Gunicorn配置与运行">Gunicorn配置与运行</a></h2> </header>
+                                <footer class="post-info">
+                                    <abbr class="published" title="2014-10-07T21:00:00+09:00"> Tue 07 October 2014 </abbr>
+                                    <address class="vcard author">By 
+                                    <a class="url fn" href="/author/hanbin.html"> Hanbin</a>
+                                    </address>
+                                </footer><!-- /.post-info -->
+                                <div class="entry-content"> <p>想请假都找不到人，混乱。</p>
+<hr class="docutils" />
+<div class="section" id="gunicorn">
+<h2>Gunicorn概述</h2>
+<p>这是一个Python的HTTP服务器，官方描述如下：</p>
+<p>&quot;Gunicorn 'Green Unicorn' is a Python WSGI HTTP Server for UNIX.&quot;</p>
+<p>接到网络请求后，启动Python应用，并返回计算的结果。</p>
+<p>实际应用中，通常在前端加入反向代理。</p>
+<pre class="literal-block">
+                     |(.html)  --&gt;  直接读取静态文件并返回
+User --&gt; Nginx  --&gt;  |(.php)   --&gt;  fast-cgi等  --&gt;  执行Php并返回计算结果
+                     |(.Py)    --&gt;  Gunicorn    --&gt;  执行Python并返回计算结果
+</pre>
+</div>
+<hr class="docutils" />
+<div class="section" id="id1">
+<h2>Gunicorn安装</h2>
+<p>可使用pip或者源码编译的方式来安装。
+pip安装的默认安装路径为 /usr/local/bin/gunicorn</p>
+<blockquote>
+pip install Gunicorn</blockquote>
+</div>
+<hr class="docutils" />
+<div class="section" id="id2">
+<h2>简单的启动命令</h2>
+<blockquote>
+# gunicorn -w 4 myapp:app</blockquote>
+<p>-w　4:</p>
+<pre class="literal-block">
+启动4个线程来等待请求 ...</pre></div> </div><!-- /.entry-content -->
+
+                                <div class="medium primary btn"><a href="/gunicornpei-zhi-yu-yun-xing.html" rel="bookmark" title="Permalink to Gunicorn配置与运行">Read more <i class="icon-arrow-right"></i></a></div>
+
+
+
+                                <div class="row tag-row">
+                                        <span>Tagged as : </span>
+                                            <a class="danger label" href="/tag/linux.html">Linux</a>
+                                            <a class="danger label" href="/tag/gunicorn.html">Gunicorn</a>
+                                </div>
+
+
+
+                        </article></li>
+                </ol><!-- /#posts-list -->
+
+        </div><!-- /.eleven.columns -->
+        
+<div class="three columns">
+
+
+<h4>Categories</h4>
+<ul class="blank">
+		<li><a href="/category/ri-ji.html">日记</a></li>
+		<li><a href="/category/xiang-mu.html">项目</a></li>
+		<li><a href="/category/xue-xi.html">学习</a></li>
+		<li><a href="/category/zheng-li.html">整理</a></li>
+</ul>
+
+
+<h4>Tags</h4>
+	<ul class="blank">
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/pptp.html">PPTP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69daf0b8>]"><a href="/tag/utf-8.html">UTF-8</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69ac5cf8>]"><a href="/tag/nfc.html">NFC</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d77240>]"><a href="/tag/apache.html">Apache</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f6854cf28>]"><a href="/tag/markdown.html">Markdown</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69b5d0f0>]"><a href="/tag/dropbox.html">Dropbox</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/vps.html">VPS</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69ce0198>]"><a href="/tag/zui-duan-lu-jing.html">最短路径</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d77240>]"><a href="/tag/fms.html">FMS</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c88198>, <pelican.contents.Article object at 0x2b9f69dc7da0>]"><a href="/tag/rc4.html">RC4</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c756d8>, <pelican.contents.Article object at 0x2b9f69b55fd0>]"><a href="/tag/dai-li.html">代理</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69daf0b8>]"><a href="/tag/bytesstr.html">bytes&amp;str</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69cc77b8>]"><a href="/tag/ba-huang-hou.html">八皇后</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69907dd8>]"><a href="/tag/kuai-su-pai-xu.html">快速排序</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c447b8>]"><a href="/tag/orpsf.html">OrPSF</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69daf0b8>]"><a href="/tag/zi-fu-bian-ma.html">字符编码</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f68544b70>]"><a href="/tag/ha-fu-man-bian-ma.html">哈夫曼编码</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d777f0>]"><a href="/tag/guo-min-xing-bi-yan.html">过敏性鼻炎</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d77e48>]"><a href="/tag/clexe.html">CL.exe</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/vpn.html">VPN</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f6854cf28>]"><a href="/tag/restructuredtext.html">reStructuredText</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c447b8>]"><a href="/tag/sftp.html">SFTP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69abac18>]"><a href="/tag/man-che-si-te-bian-ma.html">曼彻斯特编码</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f68563128>]"><a href="/tag/start-stop-daemon.html">start-stop-daemon</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d18e10>]"><a href="/tag/homebrew.html">Homebrew</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69abac18>]"><a href="/tag/tong-xin-yuan-li.html">通信原理</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69dc7da0>]"><a href="/tag/jia-jie-mi.html">加解密</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d18e10>]"><a href="/tag/mac.html">Mac</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c756d8>, <pelican.contents.Article object at 0x2b9f69daf0b8>, <pelican.contents.Article object at 0x2b9f69baea20>, <pelican.contents.Article object at 0x2b9f69b55fd0>, <pelican.contents.Article object at 0x2b9f69c68320>]"><a href="/tag/python.html">Python</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69a22b38>]"><a href="/tag/nginx.html">Nginx</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69b5d0f0>, <pelican.contents.Article object at 0x2b9f69b876a0>, <pelican.contents.Article object at 0x2b9f69c4fc18>]"><a href="/tag/pelican.html">Pelican</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69bf7780>, <pelican.contents.Article object at 0x2b9f69c62278>, <pelican.contents.Article object at 0x2b9f69907dd8>, <pelican.contents.Article object at 0x2b9f68544b70>, <pelican.contents.Article object at 0x2b9f69cc77b8>, <pelican.contents.Article object at 0x2b9f69ce0198>]"><a href="/tag/suan-fa.html">算法</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69a97240>, <pelican.contents.Article object at 0x2b9f69d77240>]"><a href="/tag/php.html">PHP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d76f28>]"><a href="/tag/apjp.html">APJP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69daf0b8>]"><a href="/tag/ucs.html">UCS</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d76f28>]"><a href="/tag/bae.html">BAE</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/openvpn.html">OpenVPN</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69daf160>]"><a href="/tag/you.html">YOU</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d18898>]"><a href="/tag/rtorrent.html">rTorrent</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f68563128>, <pelican.contents.Article object at 0x2b9f69cf7240>, <pelican.contents.Article object at 0x2b9f69a22b38>, <pelican.contents.Article object at 0x2b9f69dbd908>, <pelican.contents.Article object at 0x2b9f69d77240>]"><a href="/tag/linux.html">Linux</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/ipsec.html">IPSec</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69dc7da0>]"><a href="/tag/arc4.html">ARC4</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69b1a7b8>]"><a href="/tag/except.html">except</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c88198>]"><a href="/tag/tls.html">TLS</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69b5d0f0>]"><a href="/tag/blog.html">Blog</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69fe5dd8>, <pelican.contents.Article object at 0x2b9f69a97240>]"><a href="/tag/postgresql.html">PostgreSQL</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c58978>]"><a href="/tag/grub.html">GRUB</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c88198>]"><a href="/tag/ortunnel.html">OrTunnel</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c88198>]"><a href="/tag/ssl.html">SSL</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69daf0b8>]"><a href="/tag/unicode.html">Unicode</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69adbe80>]"><a href="/tag/p2p.html">P2P</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d83588>]"><a href="/tag/http.html">HTTP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69a97240>]"><a href="/tag/iis.html">IIS</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69cc77b8>, <pelican.contents.Article object at 0x2b9f69ce0198>]"><a href="/tag/hui-su.html">回溯</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69adbe80>]"><a href="/tag/nei-wang-chuan-tou.html">内网穿透</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c756d8>, <pelican.contents.Article object at 0x2b9f69b55fd0>]"><a href="/tag/orro.html">ORRO</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/l2tp.html">L2TP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69b1a7b8>]"><a href="/tag/zi-dong-jiao-hu.html">自动交互</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d77e48>]"><a href="/tag/sublime.html">Sublime</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c4fc18>]"><a href="/tag/github.html">GitHub</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69fe5dd8>]"><a href="/tag/shu-ju-ku.html">数据库</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/ppp.html">PPP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69ab5630>]"><a href="/tag/tu-cheng.html">土成</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69dbd908>]"><a href="/tag/security.html">Security</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f68563128>]"><a href="/tag/ormonitor.html">OrMonitor</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f68544b70>]"><a href="/tag/ha-fu-man-shu.html">哈夫曼树</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69adbe80>]"><a href="/tag/im.html">IM</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69cf7240>]"><a href="/tag/gunicorn.html">Gunicorn</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69a97240>]"><a href="/tag/mysql.html">MySQL</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c88198>]"><a href="/tag/tunnel.html">tunnel</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c68320>]"><a href="/tag/web.html">Web</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c9e5f8>]"><a href="/tag/liu-mei-ti.html">流媒体</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69ac5cf8>]"><a href="/tag/felica.html">Felica</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d77240>]"><a href="/tag/centos.html">CentOS</a></li>
+</ul>
+
+<nav class="widget">
+  <h4>Social</h4>
+  <ul class="blank">
+    <li><a href="http://github.com/lixingke3650">github</a></li>
+  </ul>
+</nav>
+
+</div> </div><!-- /.row -->
+
+<p class="paginator">
+            <a href="/index3.html"><i class="icon-arrow-left"></i></a>
+    Page 4 / 9
+        <a href="/index5.html"><i class="icon-arrow-right"></i></a>
+</p>
+</section><!-- /#content -->
+
+       </div><!-- /.row -->
+    </div><!-- /.container -->
+
+
+       <div class="container.nopad bg">
+
+    
+        <footer id="credits" class="row">
+          <div class="seven columns left-center">
+
+                   <address id="about" class="vcard body">
+                    &copy; Copyright 2016, Hanbin 
+                    <br />
+                    Proudly powered by <a href="http://getpelican.com/">Pelican</a>,
+                    which takes great advantage of <a href="http://python.org">Python</a>.
+                    <br />
+                    Based on the <a target="_blank" href="http://gumbyframework.com">Gumby Framework</a>
+                    </address>
+          </div>
+
+
+          <div class="seven columns">
+            <div class="row">
+              <ul class="socbtns">
+
+                <li><div class="btn primary"><a href="http://github.com/lixingke3650/" target="_blank">Github</a></div></li>
+
+
+
+
+              </ul>
+            </div>
+          </div>
+        </footer>
+
+    </div>
+
+
+<script type="text/javascript">
+    var disqus_shortname = 'lixingke3650-githubblog';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+  <script src="/theme/js/libs/jquery-1.9.1.min.js"></script>
+  <script src="/theme/js/libs/gumby.min.js"></script>
+  <script src="/theme/js/plugins.js"></script>
+</body>
+</html>

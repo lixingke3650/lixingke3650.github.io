@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="jp">
+<head>
+
+        <title>lixingke3650</title>
+        <meta charset="utf-8" />
+
+
+        <!-- Mobile viewport optimized: j.mp/bplateviewport -->
+        <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1">
+
+        <link rel="stylesheet" type="text/css" href="/theme/gumby.css" />
+        <link rel="stylesheet" type="text/css" href="/theme/style.css" />
+        <link rel="stylesheet" type="text/css" href="/theme/pygment.css" />
+
+        <script src="/theme/js/libs/modernizr-2.6.2.min.js"></script>
+
+
+
+
+</head>
+
+<body id="index" class="home">
+
+
+    <div class="container">
+
+        <div class="row">
+
+          <header id="banner" class="body">
+                  <h1><a href="/">lixingke3650 <strong></strong></a></h1>
+          </header><!-- /#banner -->
+
+            <div id="navigation" class="navbar row">
+              <a href="#" gumby-trigger="#navigation &gt; ul" class="toggle"><i class="icon-menu"></i></a>
+             
+              <ul class="columns">
+                <li><a href="/">Home</a></li>
+
+                  <li><a href="/category/ri-ji.html">日记</a></li>
+                  <li class="active"><a href="/category/xiang-mu.html">项目</a></li>
+                  <li><a href="/category/xue-xi.html">学习</a></li>
+                  <li><a href="/category/zheng-li.html">整理</a></li>
+
+              </ul>
+            </div>
+
+<section id="content">
+<h2>Articles in the 项目 category</h2>
+
+
+   <div class="row">
+
+
+        <div class="eleven columns">
+                 <ol id="post-list">
+                        <li><article class="hentry">
+                                <header> <h2 class="entry-title"><a href="/httpfu-wu-qi-chuan-tou-orhttpconnect.html" rel="bookmark" title="Permalink to HTTP服务器穿透-OrHttpConnect">HTTP服务器穿透-OrHttpConnect</a></h2> </header>
+                                <footer class="post-info">
+                                    <abbr class="published" title="2016-11-03T20:00:00+09:00"> Thu 03 November 2016 </abbr>
+                                    <address class="vcard author">By 
+                                    <a class="url fn" href="/author/hanbin.html"> Hanbin</a>
+                                    </address>
+                                </footer><!-- /.post-info -->
+                                <div class="entry-content"> <!-- :Summary: OrHttpConnect -->
+<p>因为公司内部防火墙，没法自由的连接外网，只能通过HTTP服务器来访问允许的网站。
+好在，HTTP服务器开了CONNECT。自己写了一个工具，利用它配合HTTP服务器的CONNECT就可以穿透防火墙了。</p>
+<p>代码托管在：
+<a class="reference external" href="https://github.com/lixingke3650/OrHttpConnect">https://github.com/lixingke3650/OrHttpConnect</a></p>
+<hr class="docutils" />
+<div class="section" id="connect">
+<h2>CONNECT</h2>
+<p>CONNECT是HTTP协议的一个方法，简单来说就是让HTTP服务器充当一个中间人，用它向外来发起你想要连接。HTTPS也是利用这个方法来建立通信的。
+简单的请求头如下：</p>
+<div class="highlight"><pre><span></span>CONNECT www.dlut.edu.cn:80 HTTP/1.1
+Host: dlut.edu.cn:80
+Proxy-Connection: Keep-Alive
+Proxy-Authorization: Basic *
+Content-Length: 0
+</pre></div>
+<p>“Proxy-Authorization: Basic *”中的“*”是登陆HTTP服务器用的验证信息，包含用户名密码，格式是 ： name:password, 并且需要用basic进行编码。
+HTTP服务器接收请求并链接到指定的目的地后会返回包含 <strong>“HTTP ...</strong></p></div></!--> </div><!-- /.entry-content -->
+
+                                <div class="medium primary btn"><a href="/httpfu-wu-qi-chuan-tou-orhttpconnect.html" rel="bookmark" title="Permalink to HTTP服务器穿透-OrHttpConnect">Read more <i class="icon-arrow-right"></i></a></div>
+
+
+
+                                <div class="row tag-row">
+                                        <span>Tagged as : </span>
+                                            <a class="danger label" href="/tag/http.html">HTTP</a>
+                                </div>
+
+
+
+                        </article></li>
+                        <li><article class="hentry">
+                                <header> <h2 class="entry-title"><a href="/wang-luo-an-quan-tong-xin-sui-dao-ortunnel.html" rel="bookmark" title="Permalink to 网络安全通信隧道-OrTunnel">网络安全通信隧道-OrTunnel</a></h2> </header>
+                                <footer class="post-info">
+                                    <abbr class="published" title="2015-03-03T22:00:00+09:00"> Tue 03 March 2015 </abbr>
+                                    <address class="vcard author">By 
+                                    <a class="url fn" href="/author/hanbin.html"> Hanbin</a>
+                                    </address>
+                                </footer><!-- /.post-info -->
+                                <div class="entry-content"> <hr class="docutils" />
+<p>网络安全这个东西，
+说他重要可在某些时候都感觉不到他的存在；
+说他不重要可在某些时候却能要了我们的命。</p>
+<p>OrTunnel为不具有安全传输的应用增加了
+在网络上安全传输数据的功能。</p>
+<p>代码托管在
+<a class="reference external" href="https://github.com/lixingke3650/OrTunnel">https://github.com/lixingke3650/OrTunnel</a></p>
+<hr class="docutils" />
+<div class="section" id="id1">
+<h2>起因</h2>
+<p>在写代理工具[ORRO][2]时,发现本地服务器与远程服务器
+之间的通信是明文的，这在科学上网的时候很容易被绊。
+代理失败不说还很容易被封端口封IP。
+开始时打算在代理内部增加加解密的功能，后来想了一想，
+单独做成一个工具可能更易去学习理解，
+也不至于使ORRO变得臃肿而失去继续下去的兴致。
+于是学习写了一个安全传输隧道工具-OrTunnel。</p>
+</div>
+<div class="section" id="id2">
+<h2>调查</h2>
+<p>之前工作中使用C和OpenSSL写过网络安全通信方面的项目，
+对SSL有过一些了解，所以首先想到的是用SSL来实现安全隧道。
+SSL协议是一系列安全通信的约束，我们也可以直接使用加密算法
+加密数据，这样更有助于理解安全通信的过程。</p>
+</div>
+<div class="section" id="id3">
+<h2>概要/参数</h2>
+<p>我希望这个工具写完以后不但可以学习，增长知识，也能真正的去使用他。
+所以稳定性与性能也被考虑了进去。</p>
+<div class="figure">
+<img alt="alternate text" src="./resource/img/网络安全通信隧道-OrTunnel/001.png" />
+</div>
+<pre class="literal-block">
+&gt; 多线程，多条隧道可同时通信
+&gt; 提供SSL/TLS加密通信方式
+&gt; 提供RC4加密通信方式
+</pre>
+<p>本想加入socket断线检测功能，后来觉得即便不加入OrTunnel，
+也会存在因网络状况导致的断线，所以若通讯中发生断线则如实的
+传递给应用，由应用重新发起链接比较好 ...</p></div> </div><!-- /.entry-content -->
+
+                                <div class="medium primary btn"><a href="/wang-luo-an-quan-tong-xin-sui-dao-ortunnel.html" rel="bookmark" title="Permalink to 网络安全通信隧道-OrTunnel">Read more <i class="icon-arrow-right"></i></a></div>
+
+
+
+                                <div class="row tag-row">
+                                        <span>Tagged as : </span>
+                                            <a class="danger label" href="/tag/tunnel.html">tunnel</a>
+                                            <a class="danger label" href="/tag/ssl.html">SSL</a>
+                                            <a class="danger label" href="/tag/tls.html">TLS</a>
+                                            <a class="danger label" href="/tag/rc4.html">RC4</a>
+                                            <a class="danger label" href="/tag/ortunnel.html">OrTunnel</a>
+                                </div>
+
+
+
+                        </article></li>
+                        <li><article class="hentry">
+                                <header> <h2 class="entry-title"><a href="/xue-xi-xie-ge-dai-li-gong-ju-orro-2.html" rel="bookmark" title="Permalink to 学习写个代理工具-ORRO (2)">学习写个代理工具-ORRO (2)</a></h2> </header>
+                                <footer class="post-info">
+                                    <abbr class="published" title="2015-01-23T21:00:00+09:00"> Fri 23 January 2015 </abbr>
+                                    <address class="vcard author">By 
+                                    <a class="url fn" href="/author/hanbin.html"> Hanbin</a>
+                                    </address>
+                                </footer><!-- /.post-info -->
+                                <div class="entry-content"> <hr class="docutils" />
+<p><strong>项目托管在https://github.com/lixingke3650/ORRO</strong></p>
+<p>本项目包含以下几篇文章：
+：：</p>
+<blockquote>
+学习写个代理工具-ORRO (1)　　－　起因，构成
+<strong>学习写个代理工具-ORRO (2)　　－　学习到的HTTP头知识</strong>
+学习写个代理工具-ORRO (3)　　－　部署</blockquote>
+<hr class="docutils" />
+<p>HTTP头数量虽然不算多，但每一个都细细研究的话，
+一是没那么多时间，在一个也超出了个人的能力范围。
+下面记载的是实现ORRO的过程中遇到的HTTP头。
+开始吧，直接捡干货。</p>
+<div class="section" id="id1">
+<h2>基本的注意项</h2>
+<ul class="simple">
+<li>HTTP头信息都以ASCII进行编码</li>
+<li>头/值对之间以&lt;LF&gt;或&lt;CR&gt;&lt;LF&gt;分割</li>
+<li>支持长值换行，换行方法是在&lt;LF&gt;后至少有一个空格</li>
+<li>头部名字不区分大小写(请求方法例如GET，与值除外)</li>
+<li>头部名称与值以冒号(:)分隔，故名称或值中不能包含冒号</li>
+</ul>
+</div>
+<div class="section" id="transfer-encoding">
+<h2>Transfer-Encoding</h2>
+<p>当服务器无法计算出返回Body信息的大小，或计算大小会消耗大量资源时，
+会将Transfer-Encoding都设为chunked来告知客户端，
+body信息大小未知，需根据body内容来确定。</p>
+<pre class="literal-block">
+&gt; HTTP/1 ...</pre></div> </div><!-- /.entry-content -->
+
+                                <div class="medium primary btn"><a href="/xue-xi-xie-ge-dai-li-gong-ju-orro-2.html" rel="bookmark" title="Permalink to 学习写个代理工具-ORRO (2)">Read more <i class="icon-arrow-right"></i></a></div>
+
+
+
+                                <div class="row tag-row">
+                                        <span>Tagged as : </span>
+                                            <a class="danger label" href="/tag/orro.html">ORRO</a>
+                                            <a class="danger label" href="/tag/dai-li.html">代理</a>
+                                            <a class="danger label" href="/tag/python.html">Python</a>
+                                </div>
+
+
+
+                        </article></li>
+                        <li><article class="hentry">
+                                <header> <h2 class="entry-title"><a href="/xue-xi-xie-ge-dai-li-gong-ju-orro-1.html" rel="bookmark" title="Permalink to 学习写个代理工具-ORRO (1)">学习写个代理工具-ORRO (1)</a></h2> </header>
+                                <footer class="post-info">
+                                    <abbr class="published" title="2014-12-16T21:00:00+09:00"> Tue 16 December 2014 </abbr>
+                                    <address class="vcard author">By 
+                                    <a class="url fn" href="/author/hanbin.html"> Hanbin</a>
+                                    </address>
+                                </footer><!-- /.post-info -->
+                                <div class="entry-content"> <hr class="docutils" />
+<p>** 项目托管在https://github.com/lixingke3650/ORRO **</p>
+<p>包含以下几篇文章
+&gt; 学习写个代理工具-ORRO (1)　　－　起因，构成
+&gt; 学习写个代理工具-ORRO (2)　　－　学习到的HTTP头知识
+&gt; 学习写个代理工具-ORRO (3)　　－　部署</p>
+<hr class="docutils" />
+<div class="section" id="id1">
+<h2>代理</h2>
+<p>在网络加速，科学上网等时候经常会碰到代理这个词，
+代理就是好像是一个中转站，如果从大连没有直飞到
+日本的飞机，或者航班数较少，那么可以借由北京中转一下。</p>
+<p>网络上的代理也是一样，从你个人的节点无法到达要访问的
+节点，或你们之间直连的速度较慢时，就可借助另外一个
+中转节点来实现互通。</p>
+<p>代理的思想很易懂，但具体到场合，工具，用途等，会
+出现很多种实现方法。</p>
+<p>最近自己以科学上网为目标学习写一个代理工具，将过程和用到的
+知识记录如下。</p>
+</div>
+<hr class="docutils" />
+<div class="section" id="orro">
+<h2>ORRO</h2>
+<p>ORRO，我给起的名字，目标是成为一个Http代理工具。
+实现方法和Goagent大致相同，以云引擎为中转。</p>
+<p>云引擎支持的语言不算多，常见的Java，Python，Ruby这几种。
+选Python吧 ...</p></div> </div><!-- /.entry-content -->
+
+                                <div class="medium primary btn"><a href="/xue-xi-xie-ge-dai-li-gong-ju-orro-1.html" rel="bookmark" title="Permalink to 学习写个代理工具-ORRO (1)">Read more <i class="icon-arrow-right"></i></a></div>
+
+
+
+                                <div class="row tag-row">
+                                        <span>Tagged as : </span>
+                                            <a class="danger label" href="/tag/orro.html">ORRO</a>
+                                            <a class="danger label" href="/tag/dai-li.html">代理</a>
+                                            <a class="danger label" href="/tag/python.html">Python</a>
+                                </div>
+
+
+
+                        </article></li>
+                        <li><article class="hentry">
+                                <header> <h2 class="entry-title"><a href="/linuxxia-cheng-xu-shou-hu-ormonitor.html" rel="bookmark" title="Permalink to Linux下程序守护-OrMonitor">Linux下程序守护-OrMonitor</a></h2> </header>
+                                <footer class="post-info">
+                                    <abbr class="published" title="2014-10-15T21:00:00+09:00"> Wed 15 October 2014 </abbr>
+                                    <address class="vcard author">By 
+                                    <a class="url fn" href="/author/hanbin.html"> Hanbin</a>
+                                    </address>
+                                </footer><!-- /.post-info -->
+                                <div class="entry-content"> <hr class="docutils" />
+<div class="section" id="id1">
+<h2>起因</h2>
+<p>之前学习Gunicorn时突然想到，如果Gunicorn运行过程中出现错误，自行退出，
+而管理员又不能及时发现，这就严重影响体验了。还好Gunicorn官网推荐了
+管理工具，比如Gaffer和Supervisor。</p>
+<p>不仅是gunicorn，工作中也遇到过项目进程出错退出的情况，所以还是自己尝试
+写一个工具，方便灵活还可以顺便学习。</p>
+</div>
+<hr class="docutils" />
+<div class="section" id="ormonitor">
+<h2>OrMonitor</h2>
+<p>这个工具可用来监视指定程序是否运行中，若程序未运行，则重启程序。</p>
+</div>
+<div class="section" id="id2">
+<h2>前提</h2>
+<p>&gt; 利用**start-stop-daemon**命令来重启程序，故系统要安装上start-stop-daemon工具
+&gt; 监控对象需要生成pid文件，若不能生成，推荐使用start-stop-daemon来启动程序
+&gt; (使用**-pidfile**和**-m**参数，自动生成pid文件)或者由OrMonitor来启动程序</p>
+</div>
+<div class="section" id="id3">
+<h2>程序存在否判断方法</h2>
+<p>&gt; 首先判断监控对象的pid文件是否存在，不存在则认为程序未启动
+&gt; 若pid文件存在则读取内容，判断读取到的pid号的进程是否存在,不存在则认为程序未启动
+&gt; 上述作业定期启动，若发现进程未运行，则启动程序</p>
+<p>注：监控对象需要生成pid文件，若不能自行生成则由start-stop-daemon代为生成</p>
+</div>
+<div class="section" id="id4">
+<h2>运行流程</h2>
+<p>&gt; 1.读取配置文件并计算监控周期(去各监控对象周期的最小公约数)
+&gt; 2 ...</p></div> </div><!-- /.entry-content -->
+
+                                <div class="medium primary btn"><a href="/linuxxia-cheng-xu-shou-hu-ormonitor.html" rel="bookmark" title="Permalink to Linux下程序守护-OrMonitor">Read more <i class="icon-arrow-right"></i></a></div>
+
+
+
+                                <div class="row tag-row">
+                                        <span>Tagged as : </span>
+                                            <a class="danger label" href="/tag/linux.html">Linux</a>
+                                            <a class="danger label" href="/tag/ormonitor.html">OrMonitor</a>
+                                            <a class="danger label" href="/tag/start-stop-daemon.html">start-stop-daemon</a>
+                                </div>
+
+
+
+                        </article></li>
+                </ol><!-- /#posts-list -->
+
+        </div><!-- /.eleven.columns -->
+        
+<div class="three columns">
+
+
+<h4>Categories</h4>
+<ul class="blank">
+		<li><a href="/category/ri-ji.html">日记</a></li>
+		<li><a href="/category/xiang-mu.html">项目</a></li>
+		<li><a href="/category/xue-xi.html">学习</a></li>
+		<li><a href="/category/zheng-li.html">整理</a></li>
+</ul>
+
+
+<h4>Tags</h4>
+	<ul class="blank">
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/pptp.html">PPTP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69daf0b8>]"><a href="/tag/utf-8.html">UTF-8</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69ac5cf8>]"><a href="/tag/nfc.html">NFC</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d77240>]"><a href="/tag/apache.html">Apache</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f6854cf28>]"><a href="/tag/markdown.html">Markdown</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69b5d0f0>]"><a href="/tag/dropbox.html">Dropbox</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/vps.html">VPS</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69ce0198>]"><a href="/tag/zui-duan-lu-jing.html">最短路径</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d77240>]"><a href="/tag/fms.html">FMS</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c88198>, <pelican.contents.Article object at 0x2b9f69dc7da0>]"><a href="/tag/rc4.html">RC4</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c756d8>, <pelican.contents.Article object at 0x2b9f69b55fd0>]"><a href="/tag/dai-li.html">代理</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69daf0b8>]"><a href="/tag/bytesstr.html">bytes&amp;str</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69cc77b8>]"><a href="/tag/ba-huang-hou.html">八皇后</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69907dd8>]"><a href="/tag/kuai-su-pai-xu.html">快速排序</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c447b8>]"><a href="/tag/orpsf.html">OrPSF</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69daf0b8>]"><a href="/tag/zi-fu-bian-ma.html">字符编码</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f68544b70>]"><a href="/tag/ha-fu-man-bian-ma.html">哈夫曼编码</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d777f0>]"><a href="/tag/guo-min-xing-bi-yan.html">过敏性鼻炎</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d77e48>]"><a href="/tag/clexe.html">CL.exe</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/vpn.html">VPN</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f6854cf28>]"><a href="/tag/restructuredtext.html">reStructuredText</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c447b8>]"><a href="/tag/sftp.html">SFTP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69abac18>]"><a href="/tag/man-che-si-te-bian-ma.html">曼彻斯特编码</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f68563128>]"><a href="/tag/start-stop-daemon.html">start-stop-daemon</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d18e10>]"><a href="/tag/homebrew.html">Homebrew</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69abac18>]"><a href="/tag/tong-xin-yuan-li.html">通信原理</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69dc7da0>]"><a href="/tag/jia-jie-mi.html">加解密</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d18e10>]"><a href="/tag/mac.html">Mac</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c756d8>, <pelican.contents.Article object at 0x2b9f69daf0b8>, <pelican.contents.Article object at 0x2b9f69baea20>, <pelican.contents.Article object at 0x2b9f69b55fd0>, <pelican.contents.Article object at 0x2b9f69c68320>]"><a href="/tag/python.html">Python</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69a22b38>]"><a href="/tag/nginx.html">Nginx</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69b5d0f0>, <pelican.contents.Article object at 0x2b9f69b876a0>, <pelican.contents.Article object at 0x2b9f69c4fc18>]"><a href="/tag/pelican.html">Pelican</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69bf7780>, <pelican.contents.Article object at 0x2b9f69c62278>, <pelican.contents.Article object at 0x2b9f69907dd8>, <pelican.contents.Article object at 0x2b9f68544b70>, <pelican.contents.Article object at 0x2b9f69cc77b8>, <pelican.contents.Article object at 0x2b9f69ce0198>]"><a href="/tag/suan-fa.html">算法</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69a97240>, <pelican.contents.Article object at 0x2b9f69d77240>]"><a href="/tag/php.html">PHP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d76f28>]"><a href="/tag/apjp.html">APJP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69daf0b8>]"><a href="/tag/ucs.html">UCS</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d76f28>]"><a href="/tag/bae.html">BAE</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/openvpn.html">OpenVPN</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69daf160>]"><a href="/tag/you.html">YOU</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d18898>]"><a href="/tag/rtorrent.html">rTorrent</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f68563128>, <pelican.contents.Article object at 0x2b9f69cf7240>, <pelican.contents.Article object at 0x2b9f69a22b38>, <pelican.contents.Article object at 0x2b9f69dbd908>, <pelican.contents.Article object at 0x2b9f69d77240>]"><a href="/tag/linux.html">Linux</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/ipsec.html">IPSec</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69dc7da0>]"><a href="/tag/arc4.html">ARC4</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69b1a7b8>]"><a href="/tag/except.html">except</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c88198>]"><a href="/tag/tls.html">TLS</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69b5d0f0>]"><a href="/tag/blog.html">Blog</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69fe5dd8>, <pelican.contents.Article object at 0x2b9f69a97240>]"><a href="/tag/postgresql.html">PostgreSQL</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c58978>]"><a href="/tag/grub.html">GRUB</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c88198>]"><a href="/tag/ortunnel.html">OrTunnel</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c88198>]"><a href="/tag/ssl.html">SSL</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69daf0b8>]"><a href="/tag/unicode.html">Unicode</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69adbe80>]"><a href="/tag/p2p.html">P2P</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d83588>]"><a href="/tag/http.html">HTTP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69a97240>]"><a href="/tag/iis.html">IIS</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69cc77b8>, <pelican.contents.Article object at 0x2b9f69ce0198>]"><a href="/tag/hui-su.html">回溯</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69adbe80>]"><a href="/tag/nei-wang-chuan-tou.html">内网穿透</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c756d8>, <pelican.contents.Article object at 0x2b9f69b55fd0>]"><a href="/tag/orro.html">ORRO</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/l2tp.html">L2TP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69b1a7b8>]"><a href="/tag/zi-dong-jiao-hu.html">自动交互</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d77e48>]"><a href="/tag/sublime.html">Sublime</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c4fc18>]"><a href="/tag/github.html">GitHub</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69fe5dd8>]"><a href="/tag/shu-ju-ku.html">数据库</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/ppp.html">PPP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69ab5630>]"><a href="/tag/tu-cheng.html">土成</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69dbd908>]"><a href="/tag/security.html">Security</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f68563128>]"><a href="/tag/ormonitor.html">OrMonitor</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f68544b70>]"><a href="/tag/ha-fu-man-shu.html">哈夫曼树</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69adbe80>]"><a href="/tag/im.html">IM</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69cf7240>]"><a href="/tag/gunicorn.html">Gunicorn</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69a97240>]"><a href="/tag/mysql.html">MySQL</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c88198>]"><a href="/tag/tunnel.html">tunnel</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c68320>]"><a href="/tag/web.html">Web</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c9e5f8>]"><a href="/tag/liu-mei-ti.html">流媒体</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69ac5cf8>]"><a href="/tag/felica.html">Felica</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d77240>]"><a href="/tag/centos.html">CentOS</a></li>
+</ul>
+
+<nav class="widget">
+  <h4>Social</h4>
+  <ul class="blank">
+    <li><a href="http://github.com/lixingke3650">github</a></li>
+  </ul>
+</nav>
+
+</div> </div><!-- /.row -->
+
+<p class="paginator">
+    Page 1 / 2
+        <a href="/category/xiang-mu2.html"><i class="icon-arrow-right"></i></a>
+</p>
+</section><!-- /#content -->
+
+       </div><!-- /.row -->
+    </div><!-- /.container -->
+
+
+       <div class="container.nopad bg">
+
+    
+        <footer id="credits" class="row">
+          <div class="seven columns left-center">
+
+                   <address id="about" class="vcard body">
+                    &copy; Copyright 2016, Hanbin 
+                    <br />
+                    Proudly powered by <a href="http://getpelican.com/">Pelican</a>,
+                    which takes great advantage of <a href="http://python.org">Python</a>.
+                    <br />
+                    Based on the <a target="_blank" href="http://gumbyframework.com">Gumby Framework</a>
+                    </address>
+          </div>
+
+
+          <div class="seven columns">
+            <div class="row">
+              <ul class="socbtns">
+
+                <li><div class="btn primary"><a href="http://github.com/lixingke3650/" target="_blank">Github</a></div></li>
+
+
+
+
+              </ul>
+            </div>
+          </div>
+        </footer>
+
+    </div>
+
+
+<script type="text/javascript">
+    var disqus_shortname = 'lixingke3650-githubblog';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+  <script src="/theme/js/libs/jquery-1.9.1.min.js"></script>
+  <script src="/theme/js/libs/gumby.min.js"></script>
+  <script src="/theme/js/plugins.js"></script>
+</body>
+</html>

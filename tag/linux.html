@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="jp">
+<head>
+
+        <title>lixingke3650 - Linux</title>
+        <meta charset="utf-8" />
+
+
+        <!-- Mobile viewport optimized: j.mp/bplateviewport -->
+        <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1">
+
+        <link rel="stylesheet" type="text/css" href="/theme/gumby.css" />
+        <link rel="stylesheet" type="text/css" href="/theme/style.css" />
+        <link rel="stylesheet" type="text/css" href="/theme/pygment.css" />
+
+        <script src="/theme/js/libs/modernizr-2.6.2.min.js"></script>
+
+
+
+
+</head>
+
+<body id="index" class="home">
+
+
+    <div class="container">
+
+        <div class="row">
+
+          <header id="banner" class="body">
+                  <h1><a href="/">lixingke3650 <strong></strong></a></h1>
+          </header><!-- /#banner -->
+
+            <div id="navigation" class="navbar row">
+              <a href="#" gumby-trigger="#navigation &gt; ul" class="toggle"><i class="icon-menu"></i></a>
+             
+              <ul class="columns">
+                <li><a href="/">Home</a></li>
+
+                  <li><a href="/category/ri-ji.html">日记</a></li>
+                  <li><a href="/category/xiang-mu.html">项目</a></li>
+                  <li><a href="/category/xue-xi.html">学习</a></li>
+                  <li><a href="/category/zheng-li.html">整理</a></li>
+
+              </ul>
+            </div>
+
+<section id="content">
+
+
+
+   <div class="row">
+
+
+        <div class="eleven columns">
+                 <ol id="post-list">
+                        <li><article class="hentry">
+                                <header> <h2 class="entry-title"><a href="/linuxxia-cheng-xu-shou-hu-ormonitor.html" rel="bookmark" title="Permalink to Linux下程序守护-OrMonitor">Linux下程序守护-OrMonitor</a></h2> </header>
+                                <footer class="post-info">
+                                    <abbr class="published" title="2014-10-15T21:00:00+09:00"> Wed 15 October 2014 </abbr>
+                                    <address class="vcard author">By 
+                                    <a class="url fn" href="/author/hanbin.html"> Hanbin</a>
+                                    </address>
+                                </footer><!-- /.post-info -->
+                                <div class="entry-content"> <hr class="docutils" />
+<div class="section" id="id1">
+<h2>起因</h2>
+<p>之前学习Gunicorn时突然想到，如果Gunicorn运行过程中出现错误，自行退出，
+而管理员又不能及时发现，这就严重影响体验了。还好Gunicorn官网推荐了
+管理工具，比如Gaffer和Supervisor。</p>
+<p>不仅是gunicorn，工作中也遇到过项目进程出错退出的情况，所以还是自己尝试
+写一个工具，方便灵活还可以顺便学习。</p>
+</div>
+<hr class="docutils" />
+<div class="section" id="ormonitor">
+<h2>OrMonitor</h2>
+<p>这个工具可用来监视指定程序是否运行中，若程序未运行，则重启程序。</p>
+</div>
+<div class="section" id="id2">
+<h2>前提</h2>
+<p>&gt; 利用**start-stop-daemon**命令来重启程序，故系统要安装上start-stop-daemon工具
+&gt; 监控对象需要生成pid文件，若不能生成，推荐使用start-stop-daemon来启动程序
+&gt; (使用**-pidfile**和**-m**参数，自动生成pid文件)或者由OrMonitor来启动程序</p>
+</div>
+<div class="section" id="id3">
+<h2>程序存在否判断方法</h2>
+<p>&gt; 首先判断监控对象的pid文件是否存在，不存在则认为程序未启动
+&gt; 若pid文件存在则读取内容，判断读取到的pid号的进程是否存在,不存在则认为程序未启动
+&gt; 上述作业定期启动，若发现进程未运行，则启动程序</p>
+<p>注：监控对象需要生成pid文件，若不能自行生成则由start-stop-daemon代为生成</p>
+</div>
+<div class="section" id="id4">
+<h2>运行流程</h2>
+<p>&gt; 1.读取配置文件并计算监控周期(去各监控对象周期的最小公约数)
+&gt; 2 ...</p></div> </div><!-- /.entry-content -->
+
+                                <div class="medium primary btn"><a href="/linuxxia-cheng-xu-shou-hu-ormonitor.html" rel="bookmark" title="Permalink to Linux下程序守护-OrMonitor">Read more <i class="icon-arrow-right"></i></a></div>
+
+
+
+                                <div class="row tag-row">
+                                        <span>Tagged as : </span>
+                                            <a class="danger label" href="/tag/linux.html">Linux</a>
+                                            <a class="danger label" href="/tag/ormonitor.html">OrMonitor</a>
+                                            <a class="danger label" href="/tag/start-stop-daemon.html">start-stop-daemon</a>
+                                </div>
+
+
+
+                        </article></li>
+                        <li><article class="hentry">
+                                <header> <h2 class="entry-title"><a href="/gunicornpei-zhi-yu-yun-xing.html" rel="bookmark" title="Permalink to Gunicorn配置与运行">Gunicorn配置与运行</a></h2> </header>
+                                <footer class="post-info">
+                                    <abbr class="published" title="2014-10-07T21:00:00+09:00"> Tue 07 October 2014 </abbr>
+                                    <address class="vcard author">By 
+                                    <a class="url fn" href="/author/hanbin.html"> Hanbin</a>
+                                    </address>
+                                </footer><!-- /.post-info -->
+                                <div class="entry-content"> <p>想请假都找不到人，混乱。</p>
+<hr class="docutils" />
+<div class="section" id="gunicorn">
+<h2>Gunicorn概述</h2>
+<p>这是一个Python的HTTP服务器，官方描述如下：</p>
+<p>&quot;Gunicorn 'Green Unicorn' is a Python WSGI HTTP Server for UNIX.&quot;</p>
+<p>接到网络请求后，启动Python应用，并返回计算的结果。</p>
+<p>实际应用中，通常在前端加入反向代理。</p>
+<pre class="literal-block">
+                     |(.html)  --&gt;  直接读取静态文件并返回
+User --&gt; Nginx  --&gt;  |(.php)   --&gt;  fast-cgi等  --&gt;  执行Php并返回计算结果
+                     |(.Py)    --&gt;  Gunicorn    --&gt;  执行Python并返回计算结果
+</pre>
+</div>
+<hr class="docutils" />
+<div class="section" id="id1">
+<h2>Gunicorn安装</h2>
+<p>可使用pip或者源码编译的方式来安装。
+pip安装的默认安装路径为 /usr/local/bin/gunicorn</p>
+<blockquote>
+pip install Gunicorn</blockquote>
+</div>
+<hr class="docutils" />
+<div class="section" id="id2">
+<h2>简单的启动命令</h2>
+<blockquote>
+# gunicorn -w 4 myapp:app</blockquote>
+<p>-w　4:</p>
+<pre class="literal-block">
+启动4个线程来等待请求 ...</pre></div> </div><!-- /.entry-content -->
+
+                                <div class="medium primary btn"><a href="/gunicornpei-zhi-yu-yun-xing.html" rel="bookmark" title="Permalink to Gunicorn配置与运行">Read more <i class="icon-arrow-right"></i></a></div>
+
+
+
+                                <div class="row tag-row">
+                                        <span>Tagged as : </span>
+                                            <a class="danger label" href="/tag/linux.html">Linux</a>
+                                            <a class="danger label" href="/tag/gunicorn.html">Gunicorn</a>
+                                </div>
+
+
+
+                        </article></li>
+                        <li><article class="hentry">
+                                <header> <h2 class="entry-title"><a href="/nginxzi-qi-dong-jiao-ben-mian-qiang.html" rel="bookmark" title="Permalink to Nginx自启动脚本勉强">Nginx自启动脚本勉强</a></h2> </header>
+                                <footer class="post-info">
+                                    <abbr class="published" title="2014-09-26T20:00:00+09:00"> Fri 26 September 2014 </abbr>
+                                    <address class="vcard author">By 
+                                    <a class="url fn" href="/author/hanbin.html"> Hanbin</a>
+                                    </address>
+                                </footer><!-- /.post-info -->
+                                <div class="entry-content"> <p>公司每月总有那么一天要开会，学些人际交往，企业管理方面的知识，
+感觉是很高大上，但实际上空洞的很。去了就是睡觉扯淡。
+日本人习惯称它为勉強会，确实是勉强啊。
+勉强勉强再勉强...</p>
+<hr class="docutils" />
+<div class="section" id="linux">
+<h2>Linux下自启动服务</h2>
+<p>关于linux对各服务启动，我理解的肤浅的过程是：</p>
+<p>&gt; 首先查看启动级别，存放于 /etc/inittab
+&gt; 根据启动级别查找相应的rc*.d文件夹
+&gt; 按照rc*.d文件夹内的脚本编号顺序依次调用(K为停止，S为启动，越小优先级越高)
+&gt; rc*.d内的脚本通常软连接至init.d，也就是说init.d内的脚本才是最终启动服务的脚本
+&gt; Debian提供service的命令来对init.d内的脚本进行操作，也可以直接使用/etc/init.d/nginx start形式的命令来操作</p>
+<p>如上所述，Nginx自启动就是要写一个服务脚本放到/etc/init.d里面，
+再软连接至rc*.d下即可实现自启动。(可借助update-rc.d来完成)
+下面是服务脚本需要的知识以及自己写的Nginx服务脚本。</p>
+</div>
+<hr class="docutils" />
+<div class="section" id="daemons">
+<h2>daemons</h2>
+<p>这里说的daemons是一种程序启动方式，就是以后台服务的形式来启动程序。
+账户注销后服务仍然运行 ...</p></div> </div><!-- /.entry-content -->
+
+                                <div class="medium primary btn"><a href="/nginxzi-qi-dong-jiao-ben-mian-qiang.html" rel="bookmark" title="Permalink to Nginx自启动脚本勉强">Read more <i class="icon-arrow-right"></i></a></div>
+
+
+
+                                <div class="row tag-row">
+                                        <span>Tagged as : </span>
+                                            <a class="danger label" href="/tag/linux.html">Linux</a>
+                                            <a class="danger label" href="/tag/nginx.html">Nginx</a>
+                                </div>
+
+
+
+                        </article></li>
+                        <li><article class="hentry">
+                                <header> <h2 class="entry-title"><a href="/linuxfu-wu-qi-an-quan-xing-she-ding.html" rel="bookmark" title="Permalink to Linux服务器安全性设定">Linux服务器安全性设定</a></h2> </header>
+                                <footer class="post-info">
+                                    <abbr class="published" title="2014-05-16T17:50:00+09:00"> Fri 16 May 2014 </abbr>
+                                    <address class="vcard author">By 
+                                    <a class="url fn" href="/author/hanbin.html"> Hanbin</a>
+                                    </address>
+                                </footer><!-- /.post-info -->
+                                <div class="entry-content"> <p>相比于Windows，Linux给人的印象是稳定以及安全。
+且不讨论这种判断或者印象的准确与否，再稳定的系统也需要合适的维护。
+本文从以下几方面来说明适合于Linux的安全对策。</p>
+<ul class="simple">
+<li>SSH登录配置</li>
+<li>文件篡改检测</li>
+<li>rootkit检测</li>
+<li>反病毒软件安装</li>
+<li>无用服务的停止</li>
+<li>缓冲区溢出防止</li>
+<li>防火墙配置</li>
+</ul>
+<div class="section" id="ssh">
+<h2>SSH登录配置</h2>
+<div class="section" id="root">
+<h3>禁用root远程登录</h3>
+<p>个人认为相比于直接开放root账户，利用普通账户登录，必要时su提权的方法，要安全一些。
+(要经过两层密码嘛^_^)
+故停止root账户的SSH登录，开放普通用户的登录权限。</p>
+<pre class="literal-block">
+// 新建账户
+# useradd userx
+# passwd userx
+
+// 加入wheel组(此组内用户可su提权至root)
+# usermod -G wheel userx
+# vi /etc/pam.d/su
+ 　　做如下变更:
+ 　　#auth required pam_wheel.so use_uid
+ 　　↓
+ 　　auth required pam_wheel.so use_uid
+
+// root登录禁止 ...</pre></div></div> </div><!-- /.entry-content -->
+
+                                <div class="medium primary btn"><a href="/linuxfu-wu-qi-an-quan-xing-she-ding.html" rel="bookmark" title="Permalink to Linux服务器安全性设定">Read more <i class="icon-arrow-right"></i></a></div>
+
+
+
+                                <div class="row tag-row">
+                                        <span>Tagged as : </span>
+                                            <a class="danger label" href="/tag/linux.html">Linux</a>
+                                            <a class="danger label" href="/tag/security.html">Security</a>
+                                </div>
+
+
+
+                        </article></li>
+                        <li><article class="hentry">
+                                <header> <h2 class="entry-title"><a href="/centosxia-da-jian-apachephpfmshuan-jing.html" rel="bookmark" title="Permalink to CentOS下搭建Apache+PHP+FMS环境">CentOS下搭建Apache+PHP+FMS环境</a></h2> </header>
+                                <footer class="post-info">
+                                    <abbr class="published" title="2014-05-16T15:30:00+09:00"> Fri 16 May 2014 </abbr>
+                                    <address class="vcard author">By 
+                                    <a class="url fn" href="/author/hanbin.html"> Hanbin</a>
+                                    </address>
+                                </footer><!-- /.post-info -->
+                                <div class="entry-content"> <hr class="docutils" />
+<p>网上有很多相关的介绍，这里只记录下流程和我安装过程中遇到的问题。
+接到的要求是在 <strong>CentOS6.4</strong> 下安装 <strong>FMS3.5</strong> 和 <strong>PHP5.4.20</strong> 。</p>
+<div class="section" id="fms">
+<h2>FMS安装</h2>
+<p>FMS(Flash Media Server),简单来说提供了网络视频服务的中间件。
+支持RTMP协议。
+FMS的安装并不困难，解压后执行下面语句即可。</p>
+<pre class="literal-block">
+\# ./installFMS
+</pre>
+<p>安装时请注意端口(RTMP端口，默认1935和80；管理端口，默认1111)配置，
+最后会询问是否安装Apache，这里将额外安装Apache，故此处选择否。</p>
+<p>安装完成后发现FMS启动失败，经排查，FMS服务共需4个线程:</p>
+<pre class="literal-block">
+* fmsmaster
+* fmsadmin
+* fmscore
+* fmsedge
+</pre>
+<p>其中fmsedge线程启动的连接库文件(<strong>libcap.so.1</strong>)缺失导致 <strong>启动失败</strong> 。</p>
+<p>新版Linux将原本位于/usr/lib下的libcap.so.1移动到了/lib下 ...</p></div> </div><!-- /.entry-content -->
+
+                                <div class="medium primary btn"><a href="/centosxia-da-jian-apachephpfmshuan-jing.html" rel="bookmark" title="Permalink to CentOS下搭建Apache+PHP+FMS环境">Read more <i class="icon-arrow-right"></i></a></div>
+
+
+
+                                <div class="row tag-row">
+                                        <span>Tagged as : </span>
+                                            <a class="danger label" href="/tag/linux.html">Linux</a>
+                                            <a class="danger label" href="/tag/fms.html">FMS</a>
+                                            <a class="danger label" href="/tag/centos.html">CentOS</a>
+                                            <a class="danger label" href="/tag/apache.html">Apache</a>
+                                            <a class="danger label" href="/tag/php.html">PHP</a>
+                                </div>
+
+
+
+                        </article></li>
+                </ol><!-- /#posts-list -->
+
+        </div><!-- /.eleven.columns -->
+        
+<div class="three columns">
+
+
+<h4>Categories</h4>
+<ul class="blank">
+		<li><a href="/category/ri-ji.html">日记</a></li>
+		<li><a href="/category/xiang-mu.html">项目</a></li>
+		<li><a href="/category/xue-xi.html">学习</a></li>
+		<li><a href="/category/zheng-li.html">整理</a></li>
+</ul>
+
+
+<h4>Tags</h4>
+	<ul class="blank">
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/pptp.html">PPTP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69daf0b8>]"><a href="/tag/utf-8.html">UTF-8</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69ac5cf8>]"><a href="/tag/nfc.html">NFC</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d77240>]"><a href="/tag/apache.html">Apache</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f6854cf28>]"><a href="/tag/markdown.html">Markdown</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69b5d0f0>]"><a href="/tag/dropbox.html">Dropbox</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/vps.html">VPS</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69ce0198>]"><a href="/tag/zui-duan-lu-jing.html">最短路径</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d77240>]"><a href="/tag/fms.html">FMS</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c88198>, <pelican.contents.Article object at 0x2b9f69dc7da0>]"><a href="/tag/rc4.html">RC4</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c756d8>, <pelican.contents.Article object at 0x2b9f69b55fd0>]"><a href="/tag/dai-li.html">代理</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69daf0b8>]"><a href="/tag/bytesstr.html">bytes&amp;str</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69cc77b8>]"><a href="/tag/ba-huang-hou.html">八皇后</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69907dd8>]"><a href="/tag/kuai-su-pai-xu.html">快速排序</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c447b8>]"><a href="/tag/orpsf.html">OrPSF</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69daf0b8>]"><a href="/tag/zi-fu-bian-ma.html">字符编码</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f68544b70>]"><a href="/tag/ha-fu-man-bian-ma.html">哈夫曼编码</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d777f0>]"><a href="/tag/guo-min-xing-bi-yan.html">过敏性鼻炎</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d77e48>]"><a href="/tag/clexe.html">CL.exe</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/vpn.html">VPN</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f6854cf28>]"><a href="/tag/restructuredtext.html">reStructuredText</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c447b8>]"><a href="/tag/sftp.html">SFTP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69abac18>]"><a href="/tag/man-che-si-te-bian-ma.html">曼彻斯特编码</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f68563128>]"><a href="/tag/start-stop-daemon.html">start-stop-daemon</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d18e10>]"><a href="/tag/homebrew.html">Homebrew</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69abac18>]"><a href="/tag/tong-xin-yuan-li.html">通信原理</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69dc7da0>]"><a href="/tag/jia-jie-mi.html">加解密</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d18e10>]"><a href="/tag/mac.html">Mac</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c756d8>, <pelican.contents.Article object at 0x2b9f69daf0b8>, <pelican.contents.Article object at 0x2b9f69baea20>, <pelican.contents.Article object at 0x2b9f69b55fd0>, <pelican.contents.Article object at 0x2b9f69c68320>]"><a href="/tag/python.html">Python</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69a22b38>]"><a href="/tag/nginx.html">Nginx</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69b5d0f0>, <pelican.contents.Article object at 0x2b9f69b876a0>, <pelican.contents.Article object at 0x2b9f69c4fc18>]"><a href="/tag/pelican.html">Pelican</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69bf7780>, <pelican.contents.Article object at 0x2b9f69c62278>, <pelican.contents.Article object at 0x2b9f69907dd8>, <pelican.contents.Article object at 0x2b9f68544b70>, <pelican.contents.Article object at 0x2b9f69cc77b8>, <pelican.contents.Article object at 0x2b9f69ce0198>]"><a href="/tag/suan-fa.html">算法</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69a97240>, <pelican.contents.Article object at 0x2b9f69d77240>]"><a href="/tag/php.html">PHP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d76f28>]"><a href="/tag/apjp.html">APJP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69daf0b8>]"><a href="/tag/ucs.html">UCS</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d76f28>]"><a href="/tag/bae.html">BAE</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/openvpn.html">OpenVPN</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69daf160>]"><a href="/tag/you.html">YOU</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d18898>]"><a href="/tag/rtorrent.html">rTorrent</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f68563128>, <pelican.contents.Article object at 0x2b9f69cf7240>, <pelican.contents.Article object at 0x2b9f69a22b38>, <pelican.contents.Article object at 0x2b9f69dbd908>, <pelican.contents.Article object at 0x2b9f69d77240>]"><a href="/tag/linux.html">Linux</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/ipsec.html">IPSec</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69dc7da0>]"><a href="/tag/arc4.html">ARC4</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69b1a7b8>]"><a href="/tag/except.html">except</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c88198>]"><a href="/tag/tls.html">TLS</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69b5d0f0>]"><a href="/tag/blog.html">Blog</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69fe5dd8>, <pelican.contents.Article object at 0x2b9f69a97240>]"><a href="/tag/postgresql.html">PostgreSQL</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c58978>]"><a href="/tag/grub.html">GRUB</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c88198>]"><a href="/tag/ortunnel.html">OrTunnel</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c88198>]"><a href="/tag/ssl.html">SSL</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69daf0b8>]"><a href="/tag/unicode.html">Unicode</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69adbe80>]"><a href="/tag/p2p.html">P2P</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d83588>]"><a href="/tag/http.html">HTTP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69a97240>]"><a href="/tag/iis.html">IIS</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69cc77b8>, <pelican.contents.Article object at 0x2b9f69ce0198>]"><a href="/tag/hui-su.html">回溯</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69adbe80>]"><a href="/tag/nei-wang-chuan-tou.html">内网穿透</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c756d8>, <pelican.contents.Article object at 0x2b9f69b55fd0>]"><a href="/tag/orro.html">ORRO</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/l2tp.html">L2TP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69b1a7b8>]"><a href="/tag/zi-dong-jiao-hu.html">自动交互</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d77e48>]"><a href="/tag/sublime.html">Sublime</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c4fc18>]"><a href="/tag/github.html">GitHub</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69fe5dd8>]"><a href="/tag/shu-ju-ku.html">数据库</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69e24d30>]"><a href="/tag/ppp.html">PPP</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69ab5630>]"><a href="/tag/tu-cheng.html">土成</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69dbd908>]"><a href="/tag/security.html">Security</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f68563128>]"><a href="/tag/ormonitor.html">OrMonitor</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f68544b70>]"><a href="/tag/ha-fu-man-shu.html">哈夫曼树</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69adbe80>]"><a href="/tag/im.html">IM</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69cf7240>]"><a href="/tag/gunicorn.html">Gunicorn</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69a97240>]"><a href="/tag/mysql.html">MySQL</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c88198>]"><a href="/tag/tunnel.html">tunnel</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c68320>]"><a href="/tag/web.html">Web</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69c9e5f8>]"><a href="/tag/liu-mei-ti.html">流媒体</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69ac5cf8>]"><a href="/tag/felica.html">Felica</a></li>
+	    <li class="tag-[<pelican.contents.Article object at 0x2b9f69d77240>]"><a href="/tag/centos.html">CentOS</a></li>
+</ul>
+
+<nav class="widget">
+  <h4>Social</h4>
+  <ul class="blank">
+    <li><a href="http://github.com/lixingke3650">github</a></li>
+  </ul>
+</nav>
+
+</div> </div><!-- /.row -->
+
+<p class="paginator">
+    Page 1 / 1
+</p>
+</section><!-- /#content -->
+
+       </div><!-- /.row -->
+    </div><!-- /.container -->
+
+
+       <div class="container.nopad bg">
+
+    
+        <footer id="credits" class="row">
+          <div class="seven columns left-center">
+
+                   <address id="about" class="vcard body">
+                    &copy; Copyright 2016, Hanbin 
+                    <br />
+                    Proudly powered by <a href="http://getpelican.com/">Pelican</a>,
+                    which takes great advantage of <a href="http://python.org">Python</a>.
+                    <br />
+                    Based on the <a target="_blank" href="http://gumbyframework.com">Gumby Framework</a>
+                    </address>
+          </div>
+
+
+          <div class="seven columns">
+            <div class="row">
+              <ul class="socbtns">
+
+                <li><div class="btn primary"><a href="http://github.com/lixingke3650/" target="_blank">Github</a></div></li>
+
+
+
+
+              </ul>
+            </div>
+          </div>
+        </footer>
+
+    </div>
+
+
+<script type="text/javascript">
+    var disqus_shortname = 'lixingke3650-githubblog';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+  <script src="/theme/js/libs/jquery-1.9.1.min.js"></script>
+  <script src="/theme/js/libs/gumby.min.js"></script>
+  <script src="/theme/js/plugins.js"></script>
+</body>
+</html>
